@@ -8,10 +8,10 @@ var config = {
 	port: 5432	
   }*/
   database: {
-    username: "kaiprzzkydiaqc",
-    password: "XNsc9jhMGW-7EqWmgJVm5-I6lj",
-    name: "daoiqurads315o",
-    host: "ec2-54-227-247-161.compute-1.amazonaws.com",
+    username: "xwrolrqorvsjkc",
+    password: "NkXAGM4WvRMpjlub0PmtCdNKgR",
+    name: "d92uop68rtvi2q",
+    host: "ec2-54-83-25-238.compute-1.amazonaws.com",
     dialect: "postgres",
 	port: 5432	
   }
