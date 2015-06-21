@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
 	}
   );
   // create tables
-  User.sync({force:true})
+  User.sync()
 	.then(function(){
 	User
 		.build({ id: 1, email: 'josecarlos.barros@gmail.com', password: '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92' })

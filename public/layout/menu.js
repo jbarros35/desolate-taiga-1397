@@ -100,9 +100,7 @@ define([
 		  }]);
 		  
 	menu.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$localStorage', 'Main', 'ngDialog', '$window', '$route',
-		function($rootScope, $scope, $location, $localStorage, Main, ngDialog, $window, $route) {
-			$scope.email = "josecarlos.barros@gmail.com";
-			$scope.password = "123456";	
+		function($rootScope, $scope, $location, $localStorage, Main, ngDialog, $window, $route) {			
         $scope.submitForm = function(isValid) {
 			if (!isValid) return;			
 			var hash = CryptoJS.SHA256($scope.password);			
