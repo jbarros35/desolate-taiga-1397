@@ -1,0 +1,15 @@
+<div class="well" ng-show="logged"> 
+	 <form class="form-horizontal" role="form" name="postForm" ng-submit="post(postForm.$valid)">
+	  <h4>What's New</h4>
+	   <div class="form-group" style="padding:14px;">
+		<textarea class="form-control vresize" rows="5" placeholder="Update your status" ng-model="description" required my-maxlength="1024"></textarea>
+	  </div>
+	  <button class="btn btn-success pull-right" type="submit" ng-disabled="postForm.$invalid">Post</button>
+	
+	 <ul class="list-inline">
+	  <li><a href=""></a></li>
+	  <li><a href=""></a></li>
+	  <li><a href=""></a></li></ul>
+	  
+	</form>
+</div>
