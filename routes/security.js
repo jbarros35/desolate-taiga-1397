@@ -1,5 +1,5 @@
 var jwt    = require('jsonwebtoken');
-var keyval = 'mykeysign123456';
+var keyval = process.env.tokenKey
 module.exports = {
 	key: keyval,
 	

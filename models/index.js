@@ -28,6 +28,12 @@ models.forEach(function(model) {
 });
 
 // describe relationships
-
+(function(m) {
+/*m.PhoneNumber.belongsTo(m.User);
+m.Task.belongsTo(m.User);
+m.User.hasMany(m.Task);
+m.User.hasMany(m.PhoneNumber);*/
+//m.User.hasOne(m.Profile);
+})(module.exports);
 // export connection
 module.exports.sequelize = sequelize;

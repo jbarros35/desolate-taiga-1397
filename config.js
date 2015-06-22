@@ -22,5 +22,5 @@ var config = {
 	port: dbOptions.port	
   }
 }
-console.log(config);
+
 module.exports = config;
