@@ -1,19 +1,25 @@
+var url     = require('url'),
+   dbUrl   = url.parse(process.env.DATABASE_URL),
+   authArr = dbUrl.auth.split(':');
+var dbOptions = {};
+
+dbOptions.name          = dbUrl.path.substring(1);
+dbOptions.user          = authArr[0];
+dbOptions.pass          = authArr[1];
+dbOptions.host          = dbUrl.host.split(':')[0];
+dbOptions.port          = dbUrl.host.split(':')[1];
+dbOptions.dialect       = 'postgres';
+dbOptions.protocol      = 'postgres';
+console.log(dbUrl.host.split(':'));
 var config = {
-  /*database: {
-    username: "node",
-    password: "node",
-    name: "business",
-    host: "127.0.0.1",
-    dialect: "postgres",
-	port: 5432	
-  }*/
+
   database: {
-    username: "xwrolrqorvsjkc",
-    password: "NkXAGM4WvRMpjlub0PmtCdNKgR",
-    name: "d92uop68rtvi2q",
-    host: "ec2-54-83-25-238.compute-1.amazonaws.com",
-    dialect: "postgres",
-	port: 5432	
+    username: dbOptions.user,
+    password: dbOptions.pass,
+    name: dbOptions.name,
+    host: dbOptions.host,
+    dialect: dbOptions.dialect,
+	port: dbOptions.port	
   }
 }
 
