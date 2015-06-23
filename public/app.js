@@ -8,20 +8,55 @@ define([
 	'ui-bootstrap',
 	'layout/menu',
 	'login/login',
-	'home/home'
+	'home/home',
+	'profile/signup'
 ], function(angular, angularRoute) {
 	// Declare app level module which depends on views, and components
-	return angular.module('myApp', [
+	var app = angular.module('myApp', [
 		'ngRoute',
 		'myApp.menu',
 		'ngStorage',
-		'myApp.home'
-		//'angularRestfulAuth'
-	]).
-	config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
-		$routeProvider.otherwise({redirectTo: '/'});				
-		$httpProvider.interceptors.push(['$q', '$location', '$localStorage', 
-		function($q, $location, $localStorage) {
+		'myApp.home',
+		'myApp.signup'
+	]);
+	
+	app.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
+		$routeProvider.when('/404', {
+           templateUrl: '404.html'           
+        }).otherwise({redirectTo: '/404'});	
+		
+		var interceptor = ['$q','$location',function($q,$location){
+			var service = {
+				'request': function (config) {	
+					// append token to header
+                    config.headers = config.headers || {};
+					// check if token exists
+                    if ($localStorage.token) {
+						// append token to header						
+						config.headers['x-access-token'] = $localStorage.token;						
+                    }
+                    return config;
+                },				
+				'response': function(response){
+				  return promise.then(
+					function success(response) {
+					return response;
+				  },
+				  function error(response) {					
+					if(response.status === 401){
+					  $location.path('/login');
+					  return $q.reject(response);
+					}
+					else{
+					  return $q.reject(response); 
+					}
+				  });
+				}
+			};
+			$httpProvider.interceptors.push(['$q', '$location', '$localStorage', service]);
+		}];
+				
+		/*function($q, $location, $localStorage) {
             return {
                 'request': function (config) {	
 					// append token to header
@@ -33,7 +68,7 @@ define([
 						config.headers['x-access-token'] = $localStorage.token;
 						
                     } else {
-						console.log('no token provided');
+						//console.log('no token provided');
 						//$location.path('/login');
 					}
                     return config;
@@ -46,8 +81,9 @@ define([
                     //return $q.reject(response);
                 }
             };
-        }]);
+        }*/
+		
 	}]);
-	
+	return app;
 
 });

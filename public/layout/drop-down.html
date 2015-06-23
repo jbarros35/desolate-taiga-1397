@@ -9,15 +9,17 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
 						</button>
 						<a class="navbar-brand" href=""></a>
 					</div>
 					<div collapse="navCollapsed" class="navbar-collapse collapse navbar-responsive-collapse">
 						<ul class="nav navbar-nav navbar-right">
-							 <li class="active"><a href="">Posts</a></li>
+							 <li class="active"><a href="#/">Posts</a></li>
 							 <li><a href="" ng-hide="logged" ng-click="clickToOpen()" role="button" data-toggle="modal">Login</a></li>
-							<li><a href="" ng-show="logged" ng-click="logout()" role="button" data-toggle="modal">Log-out</a></li>
-							<li><a href="" ng-click="showAbout()" role="button" data-toggle="modal">About</a></li>
+							 <li><a href="#signup" ng-hide="logged" role="button" data-toggle="modal">Sign up</a></li>
+							 <li><a href="" ng-show="logged" ng-click="logout()" role="button" data-toggle="modal">Log-out</a></li>
+							 <li><a href="" ng-click="showAbout()" role="button" data-toggle="modal">About</a></li>
 						</ul>
 						<div class="container navbar-form navbar-right">
 						</div>
@@ -25,62 +27,7 @@
 					<!--/.navbar-collapse -->
 				</div>
 			</div>
-<!--
-<div class="navbar navbar-default" id="subnav">
-    <div class="col-md-12">
-        <div class="navbar-header" ng-show="logged">		
-		<spam dropdown>
-          <a href="" style="margin-left:15px;" class="navbar-btn btn btn-default btn-plus dropdown-toggle" data-toggle="dropdown" dropdown-toggle>
-		  <i class="glyphicon glyphicon-home" style="color:#dd1111;">
-		  </i> Home <small><i class="glyphicon glyphicon-chevron-down"></i></small>
-		  </a>
-          <ul class="nav dropdown-menu" dropdown-menu>
-              <li><a href=""><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i> Profile</a></li>
-              <li><a href="#"><i class="glyphicon glyphicon-dashboard" style="color:#0000aa;"></i> Dashboard</a></li>
-              <li><a href="#"><i class="glyphicon glyphicon-inbox" style="color:#11dd11;"></i> Pages</a></li>
-              <li class="nav-divider"></li>
-              <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
-              <li><a href="#"><i class="glyphicon glyphicon-plus"></i> More..</a></li>
-          </ul>
-			</spam>
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse2">
-			  <span class="sr-only">Toggle navigation</span>
-			  <span class="icon-bar"></span>
-			  <span class="icon-bar"></span>
-			  <span class="icon-bar"></span>
-			  </button>
-        </div>
-		
-        <div class="collapse navbar-collapse" id="navbar-collapse2">						
-          <ul class="nav navbar-nav navbar-right">
-             <li class="active"><a href="#">Posts</a></li>
-             <li><a href="" ng-hide="logged" ng-click="clickToOpen()" role="button" data-toggle="modal">Login</a></li>
-			 <li><a href="" ng-show="logged" ng-click="logout()" role="button" data-toggle="modal">Log-out</a></li>
-             <li><a href="" ng-click="showAbout()" role="button" data-toggle="modal">About</a></li>
-           </ul>
-        </div>	
-     </div>
-</div>
--->
 <script type="text/ng-template" id="popupTmpl.html">
-		<div class="ngdialog-message" ng-controller="loginCtrl">            
-            <h2 class="text-center"><img src="assets/img/photo.png" class="img-circle"><br>User Login</h2>
-			<p ng-show="message">{{message}}</p>
-			<form name="userForm" class="form col-md-12 center-block"  ng-submit="submitForm(userForm.$valid)">
-            <div class="form-group">
-              <input type="email" class="form-control input-lg" placeholder="Email" ng-model="email" required/>
-            </div>
-            <div class="form-group">
-              <input type="password" class="form-control input-lg" placeholder="Password" ng-model="password" required/>
-            </div>
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary btn-lg btn-block" ng-disabled="userForm.$invalid">Sign In</button>
-              <span class="pull-right"><a href="#">Register</a></span>
-            </div>
-          </form>			
-        </div>
-        <div class="ngdialog-buttons">
-            
-        </div>  
+		  
 </script>		
 </div>

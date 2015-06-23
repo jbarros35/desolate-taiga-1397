@@ -11,7 +11,7 @@
  
     login.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/login', {
-			templateUrl: 'login/login.html',
+			templateUrl: 'login/loginPage.html',
 			controller: 'loginCtrl'
 		});
 	}]);
@@ -33,6 +33,73 @@
 		}
 	  };
 	});
+	
+	login.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$localStorage', 'Main', 'ngDialog', '$window', '$route',
+		function($rootScope, $scope, $location, $localStorage, Main, ngDialog, $window, $route) {			
+        $scope.submitForm = function(isValid) {
+			if (!isValid) return;			
+			var hash = CryptoJS.SHA256($scope.password);			
+			var encrypted = hash.toString(CryptoJS.enc.Base64);
+			var formData = {
+                email: $scope.email,
+                password: encrypted
+            };
+			
+			//console.log(encrypted);
+            Main.signin(formData, 
+			// success
+			function(res) {				
+                if (res.success == false) {
+                    //console.log(res.data);   
+					$scope.message='Wrong name or password';
+					//$rootScope.error = 'Failed to signin';					
+                } else {
+					if (res.token) {
+						ngDialog.closeAll();
+						$localStorage.token = res.token;
+						//console.log($localStorage.token);
+						$scope.changeLogged(true);						
+					} else {
+						$scope.message='Failed to signin, no token provided';
+						//$rootScope.error = 'Failed to signin';
+					}
+                }
+            }, // error
+			function(error) {				
+				//console.log(error);
+				$scope.message = 'Failed to signin, service error.';
+                //$rootScope.error = 'Failed to signin';
+            })
+        };
+ 
+        $scope.signup = function() {
+            var formData = {
+                email: $scope.email,
+                password: $scope.password
+            }
+ 
+            Main.save(formData, function(res) {
+                if (res.type == false) {
+                    alert(res.data)
+                } else {
+                    $localStorage.token = res.data.token;
+                    $location.path('/home');   
+                }
+            }, function() {
+                $rootScope.error = 'Failed to signup';
+            })
+        };
+		/*
+        $scope.me = function() {
+            Main.me(function(res) {
+                $scope.myDetails = res;
+            }, function() {
+                $rootScope.error = 'Failed to fetch details';
+            })
+        };*/
+         
+        $scope.token = $localStorage.token;
+    }]);
 	
 	login.factory('Main', ['$http', '$localStorage', function($http, $localStorage){
         var baseUrl = "/api/users";

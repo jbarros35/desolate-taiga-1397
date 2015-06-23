@@ -37,6 +37,70 @@ router.post('/authenticate', function(req, res) {
 	
 });
 
+router.post('/signup', function(req, res) {
+	
+	models.User.findOne({
+		where:{
+			email:req.body.email
+		}
+	}).then(function(user){
+		if (user) {
+			// if user is found return error
+			res.send({
+                type: false,
+                data: "User already exists."
+            }, 400);
+		} else {
+			var newtoken = null;
+			models.sequelize.transaction(function (t) {
+				
+				models.User.create({email:req.body.email,password:req.body.password}, {transaction: t})
+					.success(function(newuser){
+						
+						newtoken = jwt.sign({id:newuser.id, email:req.body.email}, secret.key, {
+						  expiresInMinutes: 1440 // expires in 24 hours
+						});
+						
+						// persist token state
+						newuser.updateAttributes({token:newtoken}, {transaction: t}).success(function(result){
+						// create profile
+						models.Profile.create({fullname:req.body.firstName+req.body.lastName}, {transaction: t})
+								
+								.success(function(profile) {
+									// set profile to user
+									newuser.setProfiles(profile).then(function(res){});
+							}).error(function(err){
+												console.log('error2')
+												t.rollback();
+											});					
+						}).error(function(err){
+							console.log('error2')
+							t.rollback();
+						});;
+					}).error(function(err){
+                console.log('error2')
+                t.rollback();
+            });
+			}).then(function (result) {
+			console.log('closed transaction');
+			  // Transaction has been committed
+			  // result is whatever the result of the promise chain returned to the transaction callback
+				res.json({
+						  success: true,
+						  message: 'new user registered!',
+						  token: newtoken
+				}, 200);
+			}).catch(function (err) {
+				console.log('rollback transaction');
+			  // Transaction has been rolled back
+			  // err is whatever rejected the promise chain returned to the transaction callback			  
+			  res.send({type:false, data:"Transaction error."},500);
+			  throw new Error();
+			});		
+		}
+    });	
+});
+
 router.get('/me', secret.ensureAuthorized, function(req, res) {
 	var token = (req.body && req.body.access_token) 
 		|| (req.query && req.query.access_token) 

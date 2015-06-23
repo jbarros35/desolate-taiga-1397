@@ -20,10 +20,10 @@ define([
 		    scope: false,
 		    transclude: true,
 			link: function(scope, element, attrs) {
-			scope.logged = false;
-			scope.$watch(function(){return scope.logged;}, function(value) {
-			  scope.logged = value;
-			});
+				scope.logged = false;
+				scope.$watch(function(){return scope.logged;}, function(value) {
+				  scope.logged = value;
+				});
 			},
 		    templateUrl: "layout/top-menu.html",				
 		    controller: ['$scope', '$http', '$filter', '$localStorage', function ($scope, $http, $filter, $localStorage) {
@@ -35,8 +35,7 @@ define([
 							$scope.logged = false;
 						}
 					
-						Main.me(function(res) {
-						 console.log('try me');
+						Main.me(function(res) {						 
 							if(res == "Forbidden") {
 								$scope.myDetails = res;
 								$scope.logged = false;
@@ -50,7 +49,7 @@ define([
 						$scope.logged = false;
 					}
 				};
-			    $scope.me();							
+			    							
 			}]
 		    };
 		  }]);
@@ -80,7 +79,8 @@ define([
 				}
 				// open login
 				$scope.clickToOpen = function () {
-					var dialog = ngDialog.open({ template: 'popupTmpl.html', disableAnimation: true,  
+					var dialog = ngDialog.open({ template: '/login/loginPopup.html', 
+					disableAnimation: true,  
 					className: 'ngdialog-theme-default', });					
 				};
 				// log out user
@@ -98,7 +98,7 @@ define([
 			}]
 		    };
 		  }]);
-		  
+	/*	  
 	menu.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$localStorage', 'Main', 'ngDialog', '$window', '$route',
 		function($rootScope, $scope, $location, $localStorage, Main, ngDialog, $window, $route) {			
         $scope.submitForm = function(isValid) {
@@ -165,6 +165,6 @@ define([
          
         $scope.token = $localStorage.token;
     }]);
-	
+	*/
 });
 
