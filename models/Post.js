@@ -1,6 +1,6 @@
 "use strict";
 module.exports = function(sequelize, DataTypes) {
-  var Post = sequelize.define("post", {
+  var post = sequelize.define("post", {
 	  id: {
 		type:DataTypes.INTEGER,
 		primaryKey: true,
@@ -14,9 +14,9 @@ module.exports = function(sequelize, DataTypes) {
   }  
   );
   // create tables
-  Post.sync({force:false})
+  post.sync({force:false})
 	.then(function(){	
 		console.log('table created');
 	});
-  return Post;
+  return post;
 };

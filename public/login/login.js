@@ -71,33 +71,13 @@
                 //$rootScope.error = 'Failed to signin';
             })
         };
- 
-        $scope.signup = function() {
-            var formData = {
-                email: $scope.email,
-                password: $scope.password
-            }
- 
-            Main.save(formData, function(res) {
-                if (res.type == false) {
-                    alert(res.data)
-                } else {
-                    $localStorage.token = res.data.token;
-                    $location.path('/home');   
-                }
-            }, function() {
-                $rootScope.error = 'Failed to signup';
-            })
-        };
-		/*
-        $scope.me = function() {
-            Main.me(function(res) {
-                $scope.myDetails = res;
-            }, function() {
-                $rootScope.error = 'Failed to fetch details';
-            })
-        };*/
-         
+		$scope.goSignup = function() {
+			console.log('signup');
+			ngDialog.closeAll();
+			$location.path('/signup');
+			$route.reload();			
+		};
+		// log out user		         
         $scope.token = $localStorage.token;
     }]);
 	
@@ -142,6 +122,9 @@
             },
             signin: function(data, success, error) {
                 $http.post(baseUrl + '/authenticate', data).success(success).error(error);
+            },
+			signup: function(data, success, error) {
+                $http.post(baseUrl + '/signup', data).success(success).error(error);
             },
             me: function(success, error) {
                 $http.get(baseUrl + '/me', {handleError:true}).success(success).error(error);

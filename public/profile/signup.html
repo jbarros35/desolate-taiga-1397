@@ -27,4 +27,16 @@
             <a href="#/" class="btn btn-link">Cancel</a>
         </div>
     </form>
+<script type="text/ng-template" id="popUpMsg.html">
+	<div class="ngdialog-message">            
+            <h2 class="text-center">User Registration</h2>
+			<p ng-show="message">{{message}}</p>						
+        </div>
+        <div class="ngdialog-buttons">
+			<button type="button" ng-click="goHome()" class="btn btn-primary btn-lg btn-block">OK</button>
+        </div>
+	</div>
+</script>	
+	
+	
 </div>

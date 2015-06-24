@@ -17,12 +17,45 @@ define([
 		});
 	}]);
 	
-	signup.controller('signupCtrl', ['$rootScope', '$scope', '$location', '$localStorage', 'Main', '$window', '$route',
-		function($rootScope, $scope, $location, $localStorage, Main, $window, $route) {
+	signup.controller('signupCtrl', ['$rootScope', '$scope', '$location', '$localStorage', 'Main', '$window', '$route','ngDialog',
+		function($rootScope, $scope, $location, $localStorage, Main, $window, $route, ngDialog) {
 			var user = {};
+			
 			$scope.register = function() {
 				console.log('register'+user);
-			};
+				Main.signup(user, 
+				// success
+				function(res) {				
+					if (res.success == false) {
+						//console.log(res.data);   
+						$scope.error='Failed to signup.';											
+					} else {
+						if (res.token) {							
+							// save token
+							$localStorage.token = res.token;
+							//console.log($localStorage.token);
+							$scope.changeLogged(true);
+							var dialog = ngDialog.open({ 
+								template: 'popUpMsg.html', 
+								disableAnimation: true,  
+								className: 'ngdialog-theme-default', });							
+						} else {
+							$scope.error='Failed to signin.';							
+						}
+					}
+            }, // error
+			function(error) {				
+				//console.log(error);
+				$scope.error = 'Failed to signin, service error.';
+               
+            });
+		};
+		$scope.goHome = function() {
+			console.log('home');
+			ngDialog.closeAll();
+			$location.path('/');
+			$route.reload();				
+		};
 		}			        
     ]);
 	

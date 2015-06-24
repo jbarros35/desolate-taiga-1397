@@ -1,14 +1,20 @@
 "use strict";
 module.exports = function(sequelize, DataTypes) {
-var Profile = sequelize.define("user_profile", {
+var profile = sequelize.define("profile", {
 	  id: {
 		type:DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
-	},
-	fk_user_id: DataTypes.INTEGER,
-	fullname: DataTypes.STRING       
-  }  
+	},	
+	fullname: DataTypes.STRING,
+	userid: DataTypes.INTEGER
+  }, {
+	classMethods: {
+		  associate: function(models) {
+			profile.belongsTo(models.user, {as: 'User', foreignKey: 'userid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+		  }
+		} 
+	}	
   );
- return Profile;
+ return profile;
 };

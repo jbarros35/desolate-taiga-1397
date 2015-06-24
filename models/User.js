@@ -1,9 +1,8 @@
 "use strict";
 module.exports = function(sequelize, DataTypes) {
+  var profile   = sequelize.import(__dirname + "/profile");
 
- var Profile   = sequelize.import(__dirname + "/Profile");
-
-  var User = sequelize.define("user", {
+  var user = sequelize.define("user", {
 	  id: {
 		type:DataTypes.INTEGER,
 		primaryKey: true,
@@ -13,40 +12,15 @@ module.exports = function(sequelize, DataTypes) {
     password: DataTypes.STRING,
     token: DataTypes.TEXT     
   }
-  , {
-    timestamps: false
+  ,  {
+    classMethods: {
+      associate: function(models) {
+        user.hasOne(models.profile,		
+		{as: 'Profile', foreignKey: 'id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      }
+    }
 	}
   );
-  /*
-var Profile = sequelize.define("user_profile", {
-	  id: {
-		type:DataTypes.INTEGER,
-		primaryKey: true,
-		autoIncrement: true
-	},
-	fk_user_id: DataTypes.INTEGER,
-	fullname: DataTypes.STRING       
-  }  
-  );
-  */
-  // create tables
-  User.sync({force:false}).then(function() {
-	User.build({ id: 1, email: 'josecarlos.barros@gmail.com', 
-				password: '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92' })
-				.save()
-				.then(function(user) {
-		console.log("user created");		
-		
-		Profile.sync({force:false}).then(function(){
-			Profile.build({id:1, fullname:"Jose Carlos Barros", fk_user_id:1})
-				.save()
-				.then(function(profile){
-				});							
-		});
-	});
-  });
-  
-Profile.belongsTo(User, { foreignKeyConstraint: true, onDelete: 'cascade', foreignKey: 'fk_user_id' });
 
-return User;
+return user;
 };
