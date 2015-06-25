@@ -34,16 +34,15 @@
 	<div ng-repeat="row in columns" class="col-md-4 col-sm-6">
 	  <div class="panel panel-default" ng-repeat="post in row">
 		<div class="panel-heading">
-		<a href="#viewpost/{{post.id}}" ng-show="post.id" class="pull-right">Open link</a> <h4>{{post.title}}</h4></div>
+		<a href="#viewpost/{{post.id}}" ng-show="post.id" class="pull-right">Open post</a> <h4>{{post.title}}</h4></div>
 		<div class="panel-body">
 		  <img ng-hide="post.titleImage == null" src="{{post.titleImage}}" class="img-circle pull-right"> 
-		  <a href="{{post.link}}" target="_new">View Post</a>
+		  <a href="#viewuser/{{post.id}}">User admin</a>
 		  <div class="clearfix"></div>
+		  <hr>		  
+		  <p>{{post.shortdescription}}</p>		  
 		  <hr>
-		  
-		  <p>{{post.shortdescription}}</p>
-		  
-		  <hr>
+		  <em>At: {{post.createdAt | date: "dd-MM-yyyy HH:mm"}}</em>
 		  <form ng-show="post.commentsEnabled">
 		  <div class="input-group">
 			<div class="input-group-btn">

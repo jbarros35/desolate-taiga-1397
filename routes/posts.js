@@ -12,7 +12,7 @@ router.get('/postsLast24h', function(req, res) {
 			offset: req.query.page ? req.query.page : 0,
 			//order: '"createdAt" DESC',
 			order: 'id asc',
-			attributes: ['id', 'title','shortdescription','link','titleImage'],
+			attributes: ['id', 'title','shortdescription','link','titleImage','createdAt'],
 			//where:['"createdAt" between ? and ?', yesterday, today]
 		}).then(function(posts){
 			res.json(posts);
