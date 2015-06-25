@@ -1,7 +1,7 @@
 "use strict";
 module.exports = function(sequelize, DataTypes) {
 var profile = sequelize.define("profile", {
-	  id: {
+	 profileid: {
 		type:DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true

@@ -11,9 +11,17 @@ router.get('/postsLast24h', function(req, res) {
 			limit: req.query.limit ? req.query.limit : 100,
 			offset: req.query.page ? req.query.page : 0,
 			//order: '"createdAt" DESC',
-			order: 'id asc',
-			attributes: ['id', 'title','shortdescription','link','titleImage','createdAt'],
+			order: 'postid asc',
+			attributes: ['postid', 'title','shortdescription','link','titleImage','createdAt'],
 			//where:['"createdAt" between ? and ?', yesterday, today]
+			include: [
+                {
+                    model: models.user, as: 'User', attributes: ['id']
+                },
+				{
+                    model: models.profile, as: 'Profile', attributes: ['profileid']
+                }
+            ]
 		}).then(function(posts){
 			res.json(posts);
 		});
