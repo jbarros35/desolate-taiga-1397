@@ -13,10 +13,5 @@ module.exports = function(sequelize, DataTypes) {
 	shortdescription:DataTypes.STRING
   }  
   );
-  // create tables
-  post.sync({force:false})
-	.then(function(){	
-		console.log('table created');
-	});
   return post;
 };

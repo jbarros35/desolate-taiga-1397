@@ -30,31 +30,31 @@
   	<div class="col-md-4 col-sm-6">
     </div>
 </div>
-<div class="row">	
-<div ng-repeat="row in columns" class="col-md-4 col-sm-6">
-  <div class="panel panel-default" ng-repeat="post in row">
-    <div class="panel-heading">
-	<a href="#viewpost/{{post.id}}" ng-show="post.id" class="pull-right">Open link</a> <h4>{{post.title}}</h4></div>
-	<div class="panel-body">
-	  <img ng-hide="post.titleImage == null" src="{{post.titleImage}}" class="img-circle pull-right"> 
-	  <a href="{{post.link}}" target="_new">View Post</a>
-	  <div class="clearfix"></div>
-	  <hr>
-	  
-	  <p>{{post.shortdescription}}</p>
-	  
-	  <hr>
-	  <form ng-show="post.commentsEnabled">
-	  <div class="input-group">
-		<div class="input-group-btn">
-		<button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
+<div ng-controller="homeCtrl" class="row" infinite-scroll='fetchPosts()' infinite-scroll-disabled="busy" infinite-scroll-distance='0'>	
+	<div ng-repeat="row in columns" class="col-md-4 col-sm-6">
+	  <div class="panel panel-default" ng-repeat="post in row">
+		<div class="panel-heading">
+		<a href="#viewpost/{{post.id}}" ng-show="post.id" class="pull-right">Open link</a> <h4>{{post.title}}</h4></div>
+		<div class="panel-body">
+		  <img ng-hide="post.titleImage == null" src="{{post.titleImage}}" class="img-circle pull-right"> 
+		  <a href="{{post.link}}" target="_new">View Post</a>
+		  <div class="clearfix"></div>
+		  <hr>
+		  
+		  <p>{{post.shortdescription}}</p>
+		  
+		  <hr>
+		  <form ng-show="post.commentsEnabled">
+		  <div class="input-group">
+			<div class="input-group-btn">
+			<button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
+			</div>
+			<input type="text" class="form-control" placeholder="Add a comment..">
+		  </div>
+		  </form>
+		  
 		</div>
-		<input type="text" class="form-control" placeholder="Add a comment..">
 	  </div>
-	  </form>
-	  
 	</div>
-  </div>
-</div>
 </div>
 </div>

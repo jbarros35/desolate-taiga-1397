@@ -1,10 +1,11 @@
 'use strict';
 define([
 	'angular',
-	'angularRoute'
+	'angularRoute',
+	'infinite-scroll'
 ], function(angular) {
 
-	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap']);
+	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll']);
 
 	home.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/', {
@@ -12,33 +13,39 @@ define([
 			controller: 'homeCtrl'
 		});
 	}]);
-
+	
 	home.controller('homeCtrl', ['$scope', '$http', '$interval',function($scope,$http,$interval) {
 		console.log('home ctrl');		
+		var page = 0;
+		var limit = 10;
+		$scope.posts = [];
 		
 		$scope.fetchPosts = function() {				
-					
-			$http.get('/api/posts/postsLast24h')
-				.success(function(res) {
-					//console.log(res);
+			$scope.busy = true;		
+			$http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
+				.success(function(res) {					
 					if (res instanceof Array) {
-						$scope.posts = res;
+						$scope.posts = $scope.posts.concat(res);
 					} else {
-						if ($scope.posts) {							
-							$scope.posts.push(res);
-						} else {
-							$scope.posts = [];
-							$scope.posts.push(res);
-						}
+						$scope.posts.push(res);
 					}
-					
+					print($scope.posts);
+					page+=limit;
 					$scope.columns = columnize($scope.posts, 3);
+					$scope.busy = false;
 				})
 				.error(function(err) {
 					console.log(err);
 				});
-			
+				
 		};
+		
+		function print(input) {
+		 var i;		  
+		  for(i = 0; i < input.length; i++) {
+			console.log(input[i].id);
+		  }
+		}
 		
 		// transform data in columns
 		function columnize(input, cols) {
@@ -53,7 +60,7 @@ define([
 		}
 		
 		$scope.fetchPosts();
-		$interval(function() {$scope.fetchPosts();}, 5000);
+		//$interval(function() {$scope.fetchPosts();}, 5000);
 	}]);
 
 	// 

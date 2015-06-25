@@ -18,7 +18,8 @@
     "angular-bootstrap": "~0.13.0",
     "ngstorage": "~0.3.5",
     "crypto-js": "~3.1.5",
-    "ngDialog": "~0.4.0"
+    "ngDialog": "~0.4.0",
+    "ngInfiniteScroll": "0.1.0"
   },
   "resolutions": {
     "angular": "1.4.1"

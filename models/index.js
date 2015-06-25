@@ -43,7 +43,15 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 sequelize.sync({
-    force: true
+    force: false
+}).then(function(){
+// load batch
+	if (process.env.BATCH) {
+		console.log("loading batch");
+		var batch = require("../config/batch");
+		batch.loadPosts();
+	}
 });
+
 
 module.exports = db;

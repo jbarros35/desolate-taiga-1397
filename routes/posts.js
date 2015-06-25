@@ -8,10 +8,12 @@ router.get('/postsLast24h', function(req, res) {
 	var yesterday = new Date(today);
 	yesterday.setDate(today.getDate() - 1);	
 	models.post.findAll({
-			limit: 100,
-			order: '"createdAt" DESC',
+			limit: req.query.limit ? req.query.limit : 100,
+			offset: req.query.page ? req.query.page : 0,
+			//order: '"createdAt" DESC',
+			order: 'id asc',
 			attributes: ['id', 'title','shortdescription','link','titleImage'],
-			where:['"createdAt" between ? and ?', yesterday, today]
+			//where:['"createdAt" between ? and ?', yesterday, today]
 		}).then(function(posts){
 			res.json(posts);
 		});

@@ -18,17 +18,19 @@ if(window.__karma__) {
 
 require.config({	
 	paths: {
-		angular: 		'bower_components/angular/angular',
-		angularRoute:   'bower_components/angular-route/angular-route',
+		angular: 		'bower_components/angular/angular.min',
+		angularRoute:   'bower_components/angular-route/angular-route.min',
 		'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls',
 		angularMocks:   'bower_components/angular-mocks/angular-mocks',
-		'angular-resource': 'bower_components/angular-resource/angular-resource',
+		'angular-resource': 'bower_components/angular-resource/angular-resource.min',
 		text: 		 'bower_components/requirejs-text/text',		
-		'jQuery':    'bower_components/jquery/dist/jquery',
-		'ngStorage': 'bower_components/ngstorage/ngStorage',
-		ngDialog: 'bower_components/ngDialog/js/ngDialog'
+		'jQuery':    'bower_components/jquery/dist/jquery.min',
+		'ngStorage': 'bower_components/ngstorage/ngStorage.min',
+		ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
+		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min'
 	},
 	shim: {
+		'jQuery': {'exports' : 'jQuery'},
 		'angular' : {'exports' : 'angular'},
 		'angularRoute': ['angular'],
 		'angularMocks': {
@@ -39,7 +41,7 @@ require.config({
 		'angular-resource': ['angular'],
 		'ngStorage': ['angular'],
 		'ngDialog': ['angular'],
-		'jQuery': {'exports' : 'jQuery'}		
+				
 	},
 	priority: [
 		"angular"
