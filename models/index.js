@@ -43,7 +43,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 sequelize.sync({
-    force: false
+    force: true
 }).then(function(){
 // load batch
 	if (process.env.BATCH) {

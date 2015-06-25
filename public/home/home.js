@@ -14,13 +14,15 @@ define([
 		});
 	}]);
 	
-	home.controller('homeCtrl', ['$scope', '$http', '$interval',function($scope,$http,$interval) {
+	home.controller('homeCtrl', ['$scope', '$http', '$interval', '$window',function($scope,$http,$interval,$window) {
 		console.log('home ctrl');		
 		var page = 0;
 		var limit = 10;
 		$scope.posts = [];
 		
-		$scope.fetchPosts = function() {				
+		var windowEl = angular.element($window);
+		
+		$scope.fetchPosts = function() {		
 			$scope.busy = true;		
 			$http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
 				.success(function(res) {					
@@ -29,9 +31,16 @@ define([
 					} else {
 						$scope.posts.push(res);
 					}
-					print($scope.posts);
+					
 					page+=limit;
-					$scope.columns = columnize($scope.posts, 3);
+					// calculate the size of screen and how many columns
+					var columns = 3;
+					if (windowEl.width() < 1000 && windowEl.width() > 766) {
+						columns = 2;
+					} else if (windowEl.width() < 760) {
+						columns = 1;
+					}
+					$scope.columns = columnize($scope.posts, columns);
 					$scope.busy = false;
 				})
 				.error(function(err) {
@@ -57,10 +66,8 @@ define([
 			arr[colIdx].push(input[i]);
 		  }
 		  return arr;
-		}
-		
+		}		
 		$scope.fetchPosts();
-		//$interval(function() {$scope.fetchPosts();}, 5000);
 	}]);
 
 	// 
