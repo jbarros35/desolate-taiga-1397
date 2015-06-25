@@ -16,12 +16,13 @@ if(window.__karma__) {
 	});
 }
 
-require.config({	
+require.config({
+	waitSeconds: 0,
 	paths: {
-		'jQuery':    'bower_components/jquery/dist/jquery.min',
+		//'jQuery':    'bower_components/jquery/dist/jquery.min',
 		angular: 		'bower_components/angular/angular.min',
 		angularRoute:   'bower_components/angular-route/angular-route.min',
-		'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls',
+		'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
 		angularMocks:   'bower_components/angular-mocks/angular-mocks',
 		'angular-resource': 'bower_components/angular-resource/angular-resource.min',
 		text: 		 'bower_components/requirejs-text/text',
@@ -30,7 +31,7 @@ require.config({
 		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll'
 	},
 	shim: {
-		'jQuery': {'exports' : 'jQuery'},
+		//'jQuery': {'exports' : 'jQuery'},
 		'angular' : {'exports' : 'angular'},
 		'angularRoute': ['angular'],
 		'angularMocks': {
