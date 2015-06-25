@@ -18,13 +18,13 @@ if(window.__karma__) {
 
 require.config({	
 	paths: {
+		'jQuery':    'bower_components/jquery/dist/jquery.min',
 		angular: 		'bower_components/angular/angular.min',
 		angularRoute:   'bower_components/angular-route/angular-route.min',
 		'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls',
 		angularMocks:   'bower_components/angular-mocks/angular-mocks',
 		'angular-resource': 'bower_components/angular-resource/angular-resource.min',
-		text: 		 'bower_components/requirejs-text/text',		
-		'jQuery':    'bower_components/jquery/dist/jquery.min',
+		text: 		 'bower_components/requirejs-text/text',
 		'ngStorage': 'bower_components/ngstorage/ngStorage.min',
 		ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
 		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min'
@@ -52,8 +52,8 @@ require.config({
 });
 
 require([
-	'angular',
-	'jQuery',	
+	'angular',		
+	'jQuery',
 	'app'
 	], function(angular, app) {		
 		var $html = angular.element(document.getElementsByTagName('html')[0]);

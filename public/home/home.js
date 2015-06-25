@@ -20,8 +20,7 @@ define([
 		var limit = 10;
 		$scope.posts = [];
 		
-		var windowEl = angular.element($window);
-		
+		var windowEl = angular.element($window);		
 		$scope.fetchPosts = function() {		
 			$scope.busy = true;		
 			$http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
@@ -35,9 +34,9 @@ define([
 					page+=limit;
 					// calculate the size of screen and how many columns
 					var columns = 3;
-					if (windowEl.width() < 1000 && windowEl.width() > 766) {
+					if (windowEl.innerWidth < 1000 && windowEl.innerWidth > 766) {
 						columns = 2;
-					} else if (windowEl.width() < 760) {
+					} else if (windowEl.innerWidth < 760) {
 						columns = 1;
 					}
 					$scope.columns = columnize($scope.posts, columns);

@@ -1,16 +1,16 @@
 {
   "name": "ngInfiniteScroll",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "build/ng-infinite-scroll.js",
   "dependencies": {},
   "homepage": "https://github.com/sroze/ngInfiniteScroll",
-  "_release": "0.1.0",
+  "_release": "1.0.0",
   "_resolution": {
     "type": "version",
-    "tag": "0.1.0",
-    "commit": "fc11b6e60d214e98b8302e02c5571ab9a6730f86"
+    "tag": "1.0.0",
+    "commit": "02d58a06eadbc57681755560540cdddfb807fa00"
   },
   "_source": "https://github.com/sroze/ngInfiniteScroll.git",
-  "_target": "0.1.0",
+  "_target": "1.0.0",
   "_originalSource": "ngInfiniteScroll"
 }
