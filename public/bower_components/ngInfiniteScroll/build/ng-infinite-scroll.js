@@ -28,7 +28,8 @@ mod.directive('infiniteScroll', [
         }
         handler = function() {
           var elementBottom, remaining, shouldScroll, windowBottom;
-          windowBottom = $window.height() + $window.scrollTop();
+          windowBottom = $window.height() + $window.scrollTop();		  
+		  //windowBottom = $window.innerHeight + $window.scrollTop();
           elementBottom = elem.offset().top + elem.height();
           remaining = elementBottom - windowBottom;
           shouldScroll = remaining <= $window.height() * scrollDistance;
