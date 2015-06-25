@@ -19,7 +19,8 @@
     "ngstorage": "~0.3.5",
     "crypto-js": "~3.1.5",
     "ngDialog": "~0.4.0",
-    "ngInfiniteScroll": "1.0.0"
+    "ngInfiniteScroll": "1.0.0",
+    "jquery": "~2.1.4"
   },
   "resolutions": {
     "angular": "1.4.1"

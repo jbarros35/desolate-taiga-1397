@@ -1,7 +1,7 @@
 'use strict';
-define([
+define([	
 	'angular',
-	'angularRoute',
+	'angularRoute',	
 	'infinite-scroll'
 ], function(angular) {
 

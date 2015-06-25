@@ -27,7 +27,7 @@ require.config({
 		text: 		 'bower_components/requirejs-text/text',
 		'ngStorage': 'bower_components/ngstorage/ngStorage.min',
 		ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
-		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min'
+		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll'
 	},
 	shim: {
 		'jQuery': {'exports' : 'jQuery'},
@@ -51,9 +51,9 @@ require.config({
 	baseUrl: window.__karma__ ? '/base/app' : '',
 });
 
-require([
-	'angular',		
-	'jQuery',
+require([	
+	'angular',			
+	//'jQuery',
 	'app'
 	], function(angular, app) {		
 		var $html = angular.element(document.getElementsByTagName('html')[0]);
