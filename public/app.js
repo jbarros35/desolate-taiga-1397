@@ -20,12 +20,12 @@ define([
 		'myApp.signup'
 	]);
 	
-	app.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
+	app.config(['$routeProvider', '$httpProvider',function($routeProvider, $httpProvider) {
 		$routeProvider.when('/404', {
            templateUrl: '404.html'           
         }).otherwise({redirectTo: '/404'});	
 		
-		var interceptor = ['$q','$location',function($q,$location){
+		var interceptor = ['$q','$location','$localStorage',function($q,$location,$localStorage){
 			var service = {
 				'request': function (config) {	
 					// append token to header
@@ -53,9 +53,13 @@ define([
 				  });
 				}
 			};
-			$httpProvider.interceptors.push(['$q', '$location', '$localStorage', service]);
+			return service;
+			$httpProvider.interceptors.push(interceptor);
 		}];
-				
+
+		// TODO $http.defaults.headers.common['x-access-token'] = $localStorage.token;
+
+		
 		/*function($q, $location, $localStorage) {
             return {
                 'request': function (config) {	

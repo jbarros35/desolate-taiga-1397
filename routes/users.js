@@ -7,7 +7,7 @@ var router = express.Router();
 // route to authenticate a user (POST http://localhost:8080/api/authenticate)
 router.post('/authenticate', function(req, res) {
 	
-	models.User.findOne({
+	models.user.findOne({
 		where:{
 			email:req.body.email,password:req.body.password
 		}
@@ -75,7 +75,7 @@ router.get('/me', secret.ensureAuthorized, function(req, res) {
 	var token = (req.body && req.body.access_token) 
 		|| (req.query && req.query.access_token) 
 		|| req.headers['x-access-token'];
-	models.User.findOne({where:{token: token}})
+	models.user.findOne({where:{token: token}})
 		.then(function(user) {
         if (!user) {
 			res.send({

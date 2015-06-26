@@ -9,16 +9,23 @@ module.exports = function(sequelize, DataTypes) {
 	},
 	title: DataTypes.STRING,
     description: DataTypes.TEXT,
-    titleImage: DataTypes.STRING,
+    titleimage: DataTypes.STRING,
 	link:DataTypes.STRING,
 	shortdescription:DataTypes.STRING,
-	userid: DataTypes.INTEGER
+	userid: DataTypes.INTEGER,
+	commentsenabled: {
+		type:DataTypes.BOOLEAN,
+		defaultValue: true
+	}
   }, {
 	classMethods: {
 		  associate: function(models) {
-			post.belongsTo(models.user, {as: 'User', foreignKey: 'userid', onDelete: 'CASCADE', constraints:true, onUpdate: 'CASCADE' });
+			post.belongsTo(models.profile, {as: 'Profile', foreignKey: 'userid', onDelete: 'CASCADE', constraints:true, onUpdate: 'CASCADE' });
+			post.belongsToMany(models.hashtag, 
+				{as: 'Tags', foreignKey: 'postid', through: 'hashtag_posts', onDelete: 'SET NULL', constraints:true, onUpdate: 'SET NULL' });
+			post.hasMany(models.comment, {as: 'Comments', foreignKey:'postid', onDelete: 'CASCADE', constraints:true, onUpdate: 'CASCADE'});
 		  }
-		} 
+	} 
 	}  
   );
   return post;

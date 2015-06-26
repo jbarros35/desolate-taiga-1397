@@ -3,7 +3,7 @@ module.exports = function(sequelize, DataTypes) {
   var profile   = sequelize.import(__dirname + "/profile");
   var post   = sequelize.import(__dirname + "/post");
   var user = sequelize.define("user", {
-	  id: {
+	  userid: {
 		type:DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
@@ -16,9 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         user.hasOne(models.profile,		
-		{as: 'Profile', foreignKey: 'id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-		user.hasMany(models.post,		
-		{as: 'Post', foreignKey: 'id', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+		{as: 'Profile', foreignKey: 'userid', onDelete: 'CASCADE', onUpdate: 'CASCADE' });		
       }
     }
 	}

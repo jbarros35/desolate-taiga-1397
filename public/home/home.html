@@ -1,19 +1,8 @@
 <div>
 <div class="row">
-	<div class="col-md-4 col-sm-6">
-			<div class="panel panel-default">
-			  <div class="panel-heading"><a href="" class="pull-right">View all</a> <h4>Posts popular trends</h4></div>
-				<div class="panel-body">
-				  <div class="list-group">
-					<a href="" class="list-group-item">Modal / Dialog</a>
-					<a href="" class="list-group-item">Datetime Examples</a>
-					<a href="" class="list-group-item">Data Grids</a>
-				  </div>
-				</div>
-			</div>
-	</div>
-  	
-	<div class="col-md-4 col-sm-6">
+	<div hashtags="true"></div>
+	
+	<div class="col-md-6 col-sm-6">
       	 <div whatsnew></div>
 		 
           <div class="well" ng-hide="logged"> 
@@ -26,32 +15,22 @@
             </form>
           </div>      
   	</div>
-	
-  	<div class="col-md-4 col-sm-6">
-    </div>
+
 </div>
 <div ng-controller="homeCtrl" class="row" infinite-scroll='fetchPosts()' infinite-scroll-disabled="busy" infinite-scroll-distance='0'>	
 	<div ng-repeat="row in columns" class="col-md-4 col-sm-6">
 	  <div class="panel panel-default" ng-repeat="post in row">
 		<div class="panel-heading">
-		<a href="#viewpost/{{post.id}}" ng-show="post.id" class="pull-right">Open post</a> <h4>{{post.title}}</h4></div>
+		<a href="#viewpost/{{post.postid}}" ng-show="post.postid" class="pull-right">Open post</a> <h4>{{post.title}}</h4></div>
 		<div class="panel-body">
-		  <img ng-hide="post.titleImage == null" src="{{post.titleImage}}" class="img-circle pull-right"> 
-		  <a href="#viewuser/{{post.id}}">User admin</a>
+		  <img ng-hide="post.titleimage == null" src="{{post.titleimage}}" class="img-circle pull-right"/> 
 		  <div class="clearfix"></div>
-		  <hr>		  
+		  <a href="#viewuser/{{post.userid}}" class="pull-right">User admin</a>
+		  <div class="clearfix"></div>
+		  <hr>
 		  <p>{{post.shortdescription}}</p>		  
 		  <hr>
-		  <em>At: {{post.createdAt | date: "dd-MM-yyyy HH:mm"}}</em>
-		  <form ng-show="post.commentsEnabled">
-		  <div class="input-group">
-			<div class="input-group-btn">
-			<button class="btn btn-default">+1</button><button class="btn btn-default"><i class="glyphicon glyphicon-share"></i></button>
-			</div>
-			<input type="text" class="form-control" placeholder="Add a comment..">
-		  </div>
-		  </form>
-		  
+		  <em>At: {{post.createdAt | date: "dd-MM-yyyy HH:mm"}}</em>		  		  
 		</div>
 	  </div>
 	</div>

@@ -11,7 +11,68 @@ define([
 		$routeProvider.when('/', {
 			templateUrl: 'home/home.html',
 			controller: 'homeCtrl'
+		}).when('/viewpost/:id', {
+			templateUrl: 'home/viewpost.html',
+			controller: 'postCtrl'
 		});
+	}]);
+	
+	//tagCtrl	
+	home.directive("hashtags", ['$http', 
+		function($http) {
+		return {
+				restrict: "A",
+				replace: true,
+				scope: false,
+				transclude: true,			
+				templateUrl: "home/hashtags.html",				
+				controller: ['$scope', '$http', function ($scope, $http) {
+					// select all tags
+					$http.get('/api/posts/tags').success(function(res) {
+						if (res) {
+							$scope.hashtags = res;
+						}	
+					});
+				}]
+			};
+		}
+	]);
+	
+	// http://localhost:3000/api/posts/viewpost?postid=1
+	home.controller('postCtrl', ['$scope', '$http', '$routeParams', function($scope,$http,$routeParams) {		
+		// load post data
+		$http.get('/api/posts/viewpost?postid='+$routeParams.id)
+				.success(function(res) {
+			if (res) {
+				$scope.post = res;
+			}	
+		});
+		$scope.comments = [];
+		$scope.comment = {};
+		// load comments
+		$http.get('/api/posts/commentsForPost?postid='+$routeParams.id)
+				.success(function(res) {
+			if (res) {
+				$scope.comments = res;
+			}	
+		});
+		// post a new comment
+		$scope.saveComment = function(valid) {
+			if(valid){				
+				$http.post('/api/posts/comment', $scope.comment)
+						.success(function(res) {
+							$scope.comments.push($scope.comment);
+							$scope.comment = null;														
+				})
+						.error(function(err) {
+							console.log(err);
+				});
+			}
+		}
+		// rate post
+		$scope.plusone = function() {
+			console.log('update vote');
+		}
 	}]);
 	
 	home.controller('homeCtrl', ['$scope', '$http', '$interval', '$window',function($scope,$http,$interval,$window) {
@@ -35,9 +96,10 @@ define([
 					// calculate the size of screen and how many columns
 					
 					var columns = 3;
-					if (windowEl.width() < 1000 && windowEl.width() > 766) {
+					var width = windowEl.width();
+					if (width < 1000 && width > 766) {
 						columns = 2;
-					} else if (windowEl.width() < 760) {
+					} else if (width < 760) {
 						columns = 1;
 					}
 					
@@ -47,8 +109,26 @@ define([
 				.error(function(err) {
 					console.log(err);
 				});
-				
 		};
+		// dinamically adjusts window size and posts blocks
+		$(window).on("resize.doResize", function (){
+			
+			$scope.$apply(function(){
+			   //do something to update current scope based on the new innerWidth and let angular update the view.
+			   var columns = 3;
+			   var width = window.innerWidth;
+					if (width < 1000 && width > 766) {
+						columns = 2;
+					} else if (width < 760) {
+						columns = 1;
+					}
+			   $scope.columns = columnize($scope.posts, columns);
+			});
+		});
+
+		$scope.$on("$destroy",function (){
+			 $(window).off("resize.doResize"); //remove the handler added earlier
+		});
 		
 		function print(input) {
 		 var i;		  
@@ -74,7 +154,7 @@ define([
 	// 
 	home.directive("whatsnew", ['$parse', '$http',  
 		function($parse, $http, $compile, $templateCache) {
-			 return {
+			return {
 		    restrict: "A",
 		    replace: true,
 		    scope: false,
@@ -198,7 +278,7 @@ define([
 			}]
 			};
 	}]);
-	
+	// display all posts in the home page
 	home.directive("posts", ['$parse', '$http',  
 		function($parse, $http, $compile, $templateCache) {
 			 return {

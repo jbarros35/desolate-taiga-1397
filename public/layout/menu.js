@@ -19,12 +19,12 @@ define([
 		    replace: true,
 		    scope: false,
 		    transclude: true,
-			link: function(scope, element, attrs) {
+			/*link: function(scope, element, attrs) {
 				scope.logged = false;
 				scope.$watch(function(){return scope.logged;}, function(value) {
 				  scope.logged = value;
 				});
-			},
+			},*/
 		    templateUrl: "layout/top-menu.html",				
 		    controller: ['$scope', '$http', '$filter', '$localStorage', function ($scope, $http, $filter, $localStorage) {
 				$scope.me = function() {
