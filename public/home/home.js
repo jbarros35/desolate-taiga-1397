@@ -1,11 +1,11 @@
 'use strict';
 define([	
 	'angular',
-	'angularRoute',	
-	'infinite-scroll',
+	'angularRoute',
 	'login/login',
 	'layout/utils',
-	'ngDialog'
+	'ngDialog',
+	'infinite-scroll'
 ], function(angular) {
 
 	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll', 'myapp.utils']);

@@ -19,7 +19,6 @@ if(window.__karma__) {
 require.config({
 	waitSeconds: 0,
 	paths: {
-		//'jQuery':    'bower_components/jquery/dist/jquery.min',
 		angular: 		'bower_components/angular/angular.min',
 		angularRoute:   'bower_components/angular-route/angular-route.min',
 		'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
@@ -31,7 +30,6 @@ require.config({
 		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll'
 	},
 	shim: {
-		//'jQuery': {'exports' : 'jQuery'},
 		'angular' : {'exports' : 'angular'},
 		'angularRoute': ['angular'],
 		'angularMocks': {
@@ -53,8 +51,7 @@ require.config({
 });
 
 require([	
-	'angular',			
-	//'jQuery',
+	'angular',
 	'app'
 	], function(angular, app) {		
 		var $html = angular.element(document.getElementsByTagName('html')[0]);
@@ -68,4 +65,4 @@ require([
 
 var globalConfig = {
 	    serviceURL: 'http://localhost:3000/api'
-	};
+};
