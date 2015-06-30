@@ -3,36 +3,39 @@
 	<div hashtags="true"></div>
 	
 	<div class="col-md-6 col-sm-6">
-      	 <div whatsnew></div>
-		 
-          <div class="well" ng-hide="logged"> 
-             <form class="form">
-              <h4>Sign-up</h4>
-              <div class="input-group text-center">
-              <input type="text" class="form-control input-lg" placeholder="Enter your email address">
-                <span class="input-group-btn"><button class="btn btn-lg btn-primary" type="button">OK</button></span>
-              </div>
-            </form>
-          </div>      
+      	 <div whatsnew></div>	 
   	</div>
 
 </div>
 <div ng-controller="homeCtrl" class="row" infinite-scroll='fetchPosts()' infinite-scroll-disabled="busy" infinite-scroll-distance='0'>	
-	<div ng-repeat="row in columns" class="col-md-4 col-sm-6">
-	  <div class="panel panel-default" ng-repeat="post in row">
+	<div ng-repeat="row in columns" class="col-md-4 col-sm-6" >
+		<div ng-repeat="post in row">
+	<!-- normal posts -->
+	  <div class="panel panel-default" ng-if="post.type == '1'">
 		<div class="panel-heading">
 		<a href="#viewpost/{{post.postid}}" ng-show="post.postid" class="pull-right">Open post</a> <h4>{{post.title}}</h4></div>
 		<div class="panel-body">
-		  <img ng-hide="post.titleimage == null" src="{{post.titleimage}}" class="img-circle pull-right"/> 
+		  <img ng-hide="post.titleimage == null" src="{{post.titleimage}}" class="img-responsive"/>		  
 		  <div class="clearfix"></div>
+		  <p></p>
+		  <spam>At: {{post.createdAt | date: "dd-MM-yyyy HH:mm"}}</spam>
 		  <a href="#viewuser/{{post.userid}}" class="pull-right">User admin</a>
 		  <div class="clearfix"></div>
 		  <hr>
 		  <p>{{post.shortdescription}}</p>		  
 		  <hr>
-		  <em>At: {{post.createdAt | date: "dd-MM-yyyy HH:mm"}}</em>		  		  
+		<div class="btn-toolbar">
+		  	<button class="btn btn-primary" type="button" ng-repeat="tag in post.Tags">
+		  	{{tag.description}}
+			</button>
+		</div>		  		  		  
 		</div>
 	  </div>
+	  <!-- type 2 posts -->
+	  <div ng-if="post.type == '2'"><div ng-bind-html="post.embed | to_trusted"></div></div>
+	</div>
+	  
+	  
 	</div>
 </div>
 </div>

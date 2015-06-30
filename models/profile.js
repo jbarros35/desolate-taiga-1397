@@ -8,7 +8,8 @@ var profile = sequelize.define("profile", {
 	},	
 	fullname: DataTypes.STRING,
 	userid: {type:DataTypes.INTEGER, allowNull: false},
-	nickname: {type:DataTypes.STRING, allowNull: false}
+	nickname: {type:DataTypes.STRING, allowNull: false, unique: true},
+	photo: DataTypes.STRING
   }, {
 	classMethods: {
 		  associate: function(models) {

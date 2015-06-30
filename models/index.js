@@ -14,6 +14,7 @@ var sequelize = new Sequelize(
 	  autoIncrement: true,
 	  omitNull: true,
 	  freezeTableName: true,
+	  quoteIdentifiers: true,
 	  pool: {
 		max: 15,
 		min: 0,

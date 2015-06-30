@@ -2,10 +2,13 @@
 define([	
 	'angular',
 	'angularRoute',	
-	'infinite-scroll'
+	'infinite-scroll',
+	'login/login',
+	'layout/utils',
+	'ngDialog'
 ], function(angular) {
 
-	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll']);
+	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll', 'myapp.utils']);
 
 	home.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/', {
@@ -39,7 +42,8 @@ define([
 	]);
 	
 	// http://localhost:3000/api/posts/viewpost?postid=1
-	home.controller('postCtrl', ['$scope', '$http', '$routeParams', function($scope,$http,$routeParams) {		
+	home.controller('postCtrl', ['$scope', '$http', '$routeParams', 'Main', 'ngDialog', 
+	                             function($scope,$http,$routeParams,Main,ngDialog) {		
 		// load post data
 		$http.get('/api/posts/viewpost?postid='+$routeParams.id)
 				.success(function(res) {
@@ -50,23 +54,39 @@ define([
 		$scope.comments = [];
 		$scope.comment = {};
 		// load comments
-		$http.get('/api/posts/commentsForPost?postid='+$routeParams.id)
+		$scope.loadcomments = function() {
+			$http.get('/api/posts/commentsForPost?postid='+$routeParams.id)
 				.success(function(res) {
-			if (res) {
-				$scope.comments = res;
-			}	
-		});
+					if (res) {
+						$scope.comments = res;
+					}	
+			});	
+		}
+		$scope.loadcomments();
 		// post a new comment
 		$scope.saveComment = function(valid) {
-			if(valid){				
-				$http.post('/api/posts/comment', $scope.comment)
-						.success(function(res) {
-							$scope.comments.push($scope.comment);
-							$scope.comment = null;														
-				})
-						.error(function(err) {
-							console.log(err);
+			if(valid){		
+				
+				// get logged data
+				Main.me(function(res) {
+					$scope.comment.userid = res.user.userid;
+					$scope.comment.postid =  $routeParams.id;
+								
+					$http.post('/api/posts/comment', $scope.comment).success(function(res) {
+						// reload comments
+						$scope.loadcomments();
+						//$scope.comments.push($scope.comment);
+						$scope.comment = null;														
+					}).error(function(err) {
+						$scope.error = err.data;
+						ngDialog.open({ template: 'layout/errormsg.html', scope: $scope });
+					});
+				},
+				function(err) {		
+					$scope.error = err.data;
+					ngDialog.open({ template: 'layout/errormsg.html', scope: $scope });
 				});
+				
 			}
 		}
 		// rate post
@@ -75,17 +95,32 @@ define([
 		}
 	}]);
 	
+	home.filter('to_trusted', ['$sce', function($sce){
+        return function(text) {
+            return $sce.trustAsHtml(text);
+        };
+    }]);
+
 	home.controller('homeCtrl', ['$scope', '$http', '$interval', '$window',function($scope,$http,$interval,$window) {
-		console.log('home ctrl');		
+				
 		var page = 0;
 		var limit = 10;
 		$scope.posts = [];
-		
-		var windowEl = angular.element($window);		
+		var hasmore = true;
+		var windowEl = angular.element($window);	
+		// load fetch posts	
 		$scope.fetchPosts = function() {		
+			if (!hasmore) {
+				return;
+			}
 			$scope.busy = true;		
 			$http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
-				.success(function(res) {					
+				.success(function(res) {
+					if (res && res.length > 0) {
+						hasmore = true;
+					} else {
+						hasmore = false;
+					}
 					if (res instanceof Array) {
 						$scope.posts = $scope.posts.concat(res);
 					} else {
@@ -151,8 +186,8 @@ define([
 		$scope.fetchPosts();
 	}]);
 
-	// 
-	home.directive("whatsnew", ['$parse', '$http',  
+	// new post form
+	home.directive("whatsnew", ['$parse', '$http', 
 		function($parse, $http, $compile, $templateCache) {
 			return {
 		    restrict: "A",
@@ -165,17 +200,27 @@ define([
 	            };	          
 	        },
 		    templateUrl: "home/whatsnew.html",				
-		    controller: ['$scope', '$http', '$filter', function ($scope, $http, $filter) {				
+		    controller: ['$scope', '$http', '$filter', 'Dialogs', function ($scope, $http, $filter, Dialogs) {				
 				$scope.post = function(valid) {
 					if (valid) {
 						var postData = {
-							description: $scope.description
+							description: $scope.description							
 						};
 						// get title if exists
 						var linebreaks = $scope.description.split("\n");
 						if (linebreaks[0]) {
 							postData.title = linebreaks[0];
 						}
+						// get categories
+						var categoriesRaw = $scope.categories.split(",");
+						var categories = [];
+						for (var i = 0; i < categoriesRaw.length; i++) {
+							if (categoriesRaw[i].length > 0) {
+								categories.push(
+										{description: categoriesRaw[i].trim().toLowerCase()});
+							}														
+						}
+						postData.categories = categories;
 						// extract urls
 						var urls = findUrls($scope.description);
 						var images = [];
@@ -183,7 +228,7 @@ define([
 						var hasImages = false;
 						var i;						
 						for (i = 0; i < urls.length; i++) {
-							// if there is images
+							// if there are images
 							if (checkImage(urls[i])) {	
 								hasImages = true;
 								images.push(urls[i]);								
@@ -225,6 +270,7 @@ define([
 							$scope.link = [];							
 						})
 						.error(function(err) {
+							Dialogs.showMsg(err, 'error', $scope);
 							console.log(err);
 						});
 				}
@@ -298,8 +344,7 @@ define([
 				$scope.fetchPosts = function() {					
 					
 					$http.get('/api/posts/postsLast24h')
-						.success(function(res) {
-							console.log(res);
+						.success(function(res) {							
 							if (res instanceof Array) {
 								$scope.posts = res;
 							} else {

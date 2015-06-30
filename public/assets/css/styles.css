@@ -32,7 +32,13 @@ body {
 .btn-info,.label-info,.progress-bar-info{background-color:#a0c3ff;border-color:#a0c3ff;}
 .btn-danger,.label-danger,.progress-bar-danger{background-color:#dd4b39;}
 .btn-warning,.label-warning,.progress-bar-warning{background-color:#f4b400;color:#444444;}
-
+.navbar-brand {
+  float: left;
+  height: 50px;
+  padding: 5px 5px;
+  font-size: 18px;
+  line-height: 20px;
+}
 hr {border-color:#ececec;}
 button {
  outline: 0;

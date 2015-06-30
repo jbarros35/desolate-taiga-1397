@@ -13,6 +13,8 @@ module.exports = function(sequelize, DataTypes) {
 	link:DataTypes.STRING,
 	shortdescription:DataTypes.STRING,
 	userid: DataTypes.INTEGER,
+	embed: DataTypes.TEXT,
+	type: DataTypes.INTEGER,
 	commentsenabled: {
 		type:DataTypes.BOOLEAN,
 		defaultValue: true

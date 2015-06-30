@@ -20,72 +20,48 @@ define([
 		'myApp.signup'
 	]);
 	
+	app.factory('httpRequestInterceptor', function ($localStorage) {
+		  return {
+		    request: function (config) {
+		    	if ($localStorage.token) {
+					// append token to header						
+					config.headers['x-access-token'] = $localStorage.token;						
+                }
+		      return config;
+		    }
+		  };
+		});
+	/*
+	app.factory('httpResponseInterceptor',['$q','$location',function($q,$location){
+		  return {
+		    response: function(response){
+		      return promise.then(
+		        function success(response) {
+		        return response;
+		      },
+		      function error(response) {
+		        if(response.status === 401){
+		          $location.path('/login');
+		          return $q.reject(response);
+		        }
+		        else{
+		          return $q.reject(response); 
+		        }
+		      });
+		    }
+		  }
+		}]);
+	*/
+	// Http Intercpetor to check auth failures for xhr requests
 	app.config(['$routeProvider', '$httpProvider',function($routeProvider, $httpProvider) {
+		
+		$httpProvider.interceptors.push('httpRequestInterceptor');
+		
+		//$httpProvider.interceptors.push('httpResponseInterceptor');
+		 
 		$routeProvider.when('/404', {
            templateUrl: '404.html'           
-        }).otherwise({redirectTo: '/404'});	
-		
-		var interceptor = ['$q','$location','$localStorage',function($q,$location,$localStorage){
-			var service = {
-				'request': function (config) {	
-					// append token to header
-                    config.headers = config.headers || {};
-					// check if token exists
-                    if ($localStorage.token) {
-						// append token to header						
-						config.headers['x-access-token'] = $localStorage.token;						
-                    }
-                    return config;
-                },				
-				'response': function(response){
-				  return promise.then(
-					function success(response) {
-					return response;
-				  },
-				  function error(response) {					
-					if(response.status === 401){
-					  $location.path('/login');
-					  return $q.reject(response);
-					}
-					else{
-					  return $q.reject(response); 
-					}
-				  });
-				}
-			};
-			return service;
-			$httpProvider.interceptors.push(interceptor);
-		}];
-
-		// TODO $http.defaults.headers.common['x-access-token'] = $localStorage.token;
-
-		
-		/*function($q, $location, $localStorage) {
-            return {
-                'request': function (config) {	
-					// append token to header
-                    config.headers = config.headers || {};
-					// check if token exists
-                    if ($localStorage.token) {						
-                        config.headers.Authorization = 'Bearer ' + $localStorage.token;					
-						// append token to header						
-						config.headers['x-access-token'] = $localStorage.token;
-						
-                    } else {
-						//console.log('no token provided');
-						//$location.path('/login');
-					}
-                    return config;
-                },
-                'responseError': function(response) {
-                    if(response.status === 401 || response.status === 403) {
-                        $location.path('/');
-                    }
-					return response;
-                    //return $q.reject(response);
-                }
-            };
-        }*/
+        }).otherwise({redirectTo: '/404'});			
 		
 	}]);
 	return app;

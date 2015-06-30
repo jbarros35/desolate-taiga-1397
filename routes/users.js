@@ -19,7 +19,7 @@ router.post('/authenticate', function(req, res) {
 			  expiresInMinutes: 1440 // expires in 24 hours
 			});
 			
-			console.log('new token'+newtoken);
+			//console.log('new token'+newtoken);
 			// persist token state
 			user.updateAttributes({token:newtoken}).then(function(result){
 				// return the information including token as JSON
@@ -75,7 +75,15 @@ router.get('/me', secret.ensureAuthorized, function(req, res) {
 	var token = (req.body && req.body.access_token) 
 		|| (req.query && req.query.access_token) 
 		|| req.headers['x-access-token'];
-	models.user.findOne({where:{token: token}})
+	models.user.findOne({
+		attributes: ['userid','email','token'],
+		where:{token: token},
+		include: [                
+					{
+	                    model: models.profile, as: 'Profile', attributes: ['fullname','nickname','photo']
+	                }
+	            ]
+	})
 		.then(function(user) {
         if (!user) {
 			res.send({
@@ -85,10 +93,7 @@ router.get('/me', secret.ensureAuthorized, function(req, res) {
         } else {
             res.json({
                 type: true,
-                data: {
-					id:user.id,
-					email:user.email
-				}
+                user: user
             });
         }
 		});

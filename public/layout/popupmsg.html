@@ -1,0 +1,11 @@
+<div class="ngdialog-message">
+<div class="alert alert-danger" role="alert" ng-show="type === 'error'">
+	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><b>Error:&nbsp;</b>{{msg}}</div>
+<div class="alert alert-info" role="alert" ng-show="type === 'info'"><b>Information:&nbsp;</b>{{msg}}</div>
+<div class="alert alert-warning" role="alert" ng-show="type === 'warning'"><b>Warning:&nbsp;</b>{{msg}}</div>
+</div>
+<div class="ngdialog-buttons">
+    <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="closeThisDialog('Some value')">
+    	Close
+    </button>
+</div>
