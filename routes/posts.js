@@ -52,10 +52,12 @@ router.post('/', secret.ensureAuthorized, function(req, res) {
 		
 		return models.post.build().updateAttributes({
 				title: req.body.title,
-				shortdescription: req.body.description.substring(0,255),
+				shortdescription: req.body.description ? req.body.description.substring(0,255): null,
+			    embed: req.body.embed,
 				description: req.body.description,
 				titleImage: req.body.titleImage, 
 				link: req.body.link,
+				type: req.body.type,
 				userid: req.body.userid	
 			}, {transaction: t}).then(function(post){
 				newpost = post;

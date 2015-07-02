@@ -32,7 +32,18 @@
 		</div>
 	  </div>
 	  <!-- type 2 posts -->
-	  <div ng-if="post.type == '2'"><div ng-bind-html="post.embed | to_trusted"></div></div>
+	  <div ng-if="post.type == '2'" class="panel panel-default">
+		  <div class="panel-heading"><h4>{{post.title}}</h4></div>
+		  <div class="panel-body">
+		  <div ng-bind-html="post.embed | to_trusted"></div>
+			  <hr>
+			  <div class="btn-toolbar">
+				  <button class="btn btn-primary" type="button" ng-repeat="tag in post.Tags">
+					  {{tag.description}}
+				  </button>
+			  </div>
+		  </div>
+	  </div>
 	</div>
 	  
 	  

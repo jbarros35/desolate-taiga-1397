@@ -4,11 +4,11 @@ define([
 	'angularRoute',
 	'login/login',
 	'layout/utils',
-	'ngDialog',
-	'infinite-scroll'
+	'infinite-scroll',
+	'ngDialog'
 ], function(angular) {
 
-	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll', 'myapp.utils']);
+	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll', 'myapp.utils','angularRestfulAuth']);
 
 	home.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/', {
@@ -94,7 +94,7 @@ define([
 			console.log('update vote');
 		}
 	}]);
-	
+	// filter scape html
 	home.filter('to_trusted', ['$sce', function($sce){
         return function(text) {
             return $sce.trustAsHtml(text);
@@ -126,8 +126,10 @@ define([
 					} else {
 						$scope.posts.push(res);
 					}
-					
-					page+=limit;
+					if (hasmore) {
+						page+=limit;
+					}
+
 					// calculate the size of screen and how many columns
 					
 					var columns = 3;
@@ -187,7 +189,7 @@ define([
 	}]);
 
 	// new post form
-	home.directive("whatsnew", ['$parse', '$http', 
+	home.directive("whatsnew", ['$parse', '$http',
 		function($parse, $http, $compile, $templateCache) {
 			return {
 		    restrict: "A",
@@ -200,68 +202,102 @@ define([
 	            };	          
 	        },
 		    templateUrl: "home/whatsnew.html",				
-		    controller: ['$scope', '$http', '$filter', 'Dialogs', function ($scope, $http, $filter, Dialogs) {				
+		    controller: ['$scope', '$http', '$filter', 'Dialogs', '$localStorage', 'Main', function ($scope, $http, $filter, Dialogs, $localStorage, Main) {
 				$scope.post = function(valid) {
 					if (valid) {
-						var postData = {
-							description: $scope.description							
-						};
-						// get title if exists
-						var linebreaks = $scope.description.split("\n");
-						if (linebreaks[0]) {
-							postData.title = linebreaks[0];
-						}
-						// get categories
-						var categoriesRaw = $scope.categories.split(",");
-						var categories = [];
-						for (var i = 0; i < categoriesRaw.length; i++) {
-							if (categoriesRaw[i].length > 0) {
-								categories.push(
-										{description: categoriesRaw[i].trim().toLowerCase()});
-							}														
-						}
-						postData.categories = categories;
-						// extract urls
-						var urls = findUrls($scope.description);
-						var images = [];
-						$scope.link = [];
-						var hasImages = false;
-						var i;						
-						for (i = 0; i < urls.length; i++) {
-							// if there are images
-							if (checkImage(urls[i])) {	
-								hasImages = true;
-								images.push(urls[i]);								
-							} else {
-								$scope.link.push(urls[i]);
-							} 
-						}
-						var imageLoaded = null;
-						if (hasImages) {
-							// get first image that loads on time
-							for (i = 0; i < images.length; i++) {
-							// async function for testing images timeout
-							testImage(images[i], 
-								function(url, callRes){									
-										if (callRes == "success") {
-											imageLoaded = url;											
-											postData.link=$scope.link[0];
-											postData.titleImage= imageLoaded;															
-										};
-										savePost(postData);										
-									
-								}, 1000);						
-								break;
+						// get user logged
+						$scope.me = function() {
+							try {
+								if ($localStorage.token) {
+									// check if token is valid
+									Main.me(function(res) {
+										if(res == "Forbidden") {
+											$scope.myDetails = res;
+										} else {
+											$scope.user = res.user;
+											var postData = {userid:res.user.userid};
+											// get categories
+											var categoriesRaw = $scope.categories.split(",");
+											var categories = [];
+											for (var i = 0; i < categoriesRaw.length; i++) {
+												if (categoriesRaw[i].length > 0) {
+													categories.push(
+														{description: categoriesRaw[i].trim().toLowerCase()});
+												}
+											}
+											postData.categories = categories;
+
+											// check if there is embeded code
+											var regex = /(<([^>]+)>)/ig;
+											// if is not embed
+											if (!regex.test($scope.description)) {
+												postData.description = $scope.description;
+												postData.type=1;
+												// get title if exists
+												var linebreaks = $scope.description.split("\n");
+												if (linebreaks[0]) {
+													postData.title = linebreaks[0].substring(0,140);
+												}
+												// extract urls
+												var urls = findUrls($scope.description);
+												var images = [];
+												$scope.link = [];
+												var hasImages = false;
+												var i;
+												for (i = 0; i < urls.length; i++) {
+													// if there are images
+													if (checkImage(urls[i])) {
+														hasImages = true;
+														images.push(urls[i]);
+													} else {
+														$scope.link.push(urls[i]);
+													}
+												}
+												var imageLoaded = null;
+												if (hasImages) {
+													// get first image that loads on time
+													for (i = 0; i < images.length; i++) {
+														// async function for testing images timeout
+														testImage(images[i],
+															function(url, callRes){
+																if (callRes == "success") {
+																	imageLoaded = url;
+																	postData.link=$scope.link[0];
+																	postData.titleImage= imageLoaded;
+																};
+																savePost(postData);
+
+															}, 1000);
+														break;
+													}
+
+												} else {
+													postData.link=$scope.link[0];
+													savePost(postData);
+												}
+											} else {
+												// in case of embed posts
+												postData.type=2;
+												postData.embed = $scope.description;
+												savePost(postData)
+											}
+										}
+									}, function() {
+										$scope.error = 'Failed to get user data';
+									});
+								} else {
+									// TODO redirect to login
+									Dialogs.showMsg('User is invalid.', 'error', $scope);
+								}
+
+							}catch(err) {
+								Dialogs.showMsg(err, 'error', $scope);
 							}
-							
-						} else {							
-							postData.link=$scope.link[0];
-							savePost(postData);
-						}
-						
+						};
+						$scope.me();
 					}
 				};
-				
+				// save post using service
 				function savePost(postData) {
 					$http.post('/api/posts/', postData)
 						.success(function(res) {
@@ -370,24 +406,25 @@ define([
 			}]
 			};
 	}]);
-	
+	/*
 	home.directive('myMaxlength', function() {
-	return {
-    require: 'ngModel',
-    link: function (scope, element, attrs, ngModelCtrl) {
-      var maxlength = Number(attrs.myMaxlength);
-      function fromUser(text) {
-          if (text.length > maxlength) {
-            var transformedInput = text.substring(0, maxlength);
-            ngModelCtrl.$setViewValue(transformedInput);
-            ngModelCtrl.$render();
-            return transformedInput;
-          } 
-          return text;
-      }
-      ngModelCtrl.$parsers.push(fromUser);
-    }
-  }; 
-});
+		return {
+		require: 'ngModel',
+		link: function (scope, element, attrs, ngModelCtrl) {
+		  var maxlength = Number(attrs.myMaxlength);
+		  function fromUser(text) {
+			  if (text.length > maxlength) {
+				var transformedInput = text.substring(0, maxlength);
+				ngModelCtrl.$setViewValue(transformedInput);
+				ngModelCtrl.$render();
+				return transformedInput;
+			  }
+			  return text;
+		  }
+		  ngModelCtrl.$parsers.push(fromUser);
+		}
+	  };
+	});
+	*/
 });
 

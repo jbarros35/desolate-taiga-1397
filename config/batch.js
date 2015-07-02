@@ -48,19 +48,29 @@ module.exports = {
 				"<script async src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>",
 					type: 2});
 
+				posts.push({
+						userid: profile.profileid,
+						title: "Foster the People",
+						embed: "<iframe src=\"https://www.youtube.com/embed/SDTZ7iX4vTQ\" class=\"img-responsive\" frameborder=\"0\" allowfullscreen></iframe>",
+						type: 2});
 		  //}		
-		  /*models.post.create(posts[0]).then(function(post){
-			post.addTag(tags[0]);
-			post.addTag(tags[3]);
-		  });*/
+
+		for (var i = 0; i < posts.length;i++) {
+			models.post.create(posts[i]).then(function(post){
+				post.addTag(tags[0]);
+				post.addTag(tags[3]);
+			});
+		}
+
 		  
-		  models.post.bulkCreate(posts).then(function(postList){
+		 /* models.post.bulkCreate(posts).then(function(postList){
 		  	for (var i = 0; i < postList.length;i++) {
+				console.log(postList[i]);
 				postList[i].addTag(tags[0]);
 				postList[i].addTag(tags[3]);
 		  	}		  	
 			console.log("batch ended");
-		  });
+		  });*/
 
 		});
 		
