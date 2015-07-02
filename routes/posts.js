@@ -129,4 +129,16 @@ router.get('/tags', function(req, res) {
 		});
 });
 
+router.get('/findTags', function(req, res) {
+	models.hashtag.findAll({
+		limit: 10,
+		offset: 0,
+		order: 'description asc',
+		attributes: ['description'],
+		where: ["description LIKE ?", req.query.name+"%"]
+	}).then(function(posts){
+		res.json(posts);
+	});
+});
+
 module.exports = router;

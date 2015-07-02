@@ -27,7 +27,8 @@ require.config({
 		text: 		 'bower_components/requirejs-text/text',
 		'ngStorage': 'bower_components/ngstorage/ngStorage.min',
 		ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
-		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll'
+		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
+		'angucomplete':'bower_components/angucomplete/angucomplete'
 	},
 	shim: {
 		'angular' : {'exports' : 'angular'},
@@ -40,7 +41,7 @@ require.config({
 		'angular-resource': ['angular'],
 		'ngStorage': ['angular'],
 		'ngDialog': ['angular'],
-				
+		'angucomplete':['angular']
 	},
 	priority: [
 		"angular"

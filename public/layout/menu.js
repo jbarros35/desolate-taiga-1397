@@ -2,10 +2,10 @@
 define([
 	'angular',
 	'angularRoute',
-	'login/login',
 	'ui-bootstrap',
 	'ngDialog',
-	'ngStorage'
+	'ngStorage',
+	'login/login'
 ], function(angular) {
 
 	var menu = angular.module('myApp.menu', ['ngRoute','ui.bootstrap','angularRestfulAuth','ngDialog']);

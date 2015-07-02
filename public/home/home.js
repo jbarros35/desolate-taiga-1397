@@ -2,13 +2,14 @@
 define([	
 	'angular',
 	'angularRoute',
-	'login/login',
-	'layout/utils',
+	'ngDialog',
 	'infinite-scroll',
-	'ngDialog'
+	'angucomplete',
+	'login/login',
+	'layout/utils'
 ], function(angular) {
 
-	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll', 'myapp.utils','angularRestfulAuth']);
+	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll', 'myapp.utils','angularRestfulAuth','angucomplete']);
 
 	home.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/', {
@@ -41,7 +42,7 @@ define([
 		}
 	]);
 	
-	// http://localhost:3000/api/posts/viewpost?postid=1
+	//
 	home.controller('postCtrl', ['$scope', '$http', '$routeParams', 'Main', 'ngDialog', 
 	                             function($scope,$http,$routeParams,Main,ngDialog) {		
 		// load post data
@@ -187,6 +188,33 @@ define([
 		}		
 		$scope.fetchPosts();
 	}]);
+
+	// new post form
+	/*home.directive("autoComplete", ['$parse', '$http',
+		function($http, scope, iElement, iAttrs) {
+			return {
+				restrict: "A",
+				replace: true,
+				scope: false,
+				transclude: true,
+				controller: ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+					$scope.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel",
+						"francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit",
+						"guillaume", "nicolas", "joseph"];
+
+
+					iElement.autocomplete({
+						source: scope[iAttrs.uiItems],
+						select: function () {
+							$timeout(function () {
+								iElement.trigger('input');
+							}, 0);
+						}
+					});
+				}]
+			}
+		}
+	]);*/
 
 	// new post form
 	home.directive("whatsnew", ['$parse', '$http',
