@@ -21,7 +21,8 @@
     "ngDialog": "~0.4.0",
     "ngInfiniteScroll": "1.0.0",
     "jquery": "~2.1.4",
-    "angucomplete": "*"
+    "angular-mass-autocomplete": "~0.2.3",
+    "angular-sanitize": "~1.4.1"
   },
   "resolutions": {
     "angular": "1.4.1"

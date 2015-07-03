@@ -4,12 +4,50 @@ define([
 	'angularRoute',
 	'ngDialog',
 	'infinite-scroll',
-	'angucomplete',
+	'angular-sanitize',
+	'mass-complete',
 	'login/login',
 	'layout/utils'
 ], function(angular) {
 
-	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll', 'myapp.utils','angularRestfulAuth','angucomplete']);
+	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll',
+		'myapp.utils','angularRestfulAuth','ngSanitize', 'MassAutoComplete']);
+
+	home.controller('categoryController', function ($scope, $sce, $q) {
+
+		var states = ['Alabama', 'Alaska', 'California', 'New york'];
+
+		function suggest_state(term) {
+			var q = term.toLowerCase().trim();
+			var results = [];
+
+			// Find first 10 states that start with `term`.
+			for (var i = 0; i < states.length && results.length < 10; i++) {
+				var state = states[i];
+				if (state.toLowerCase().indexOf(q) === 0)
+					results.push({ label: state, value: state });
+			}
+
+			return results;
+		}
+
+		function suggest_state_delimited(term) {
+			var ix = term.lastIndexOf(','),
+				lhs = term.substring(0, ix + 1),
+				rhs = term.substring(ix + 1),
+				suggestions = suggest_state(rhs);
+
+			suggestions.forEach(function (s) {
+				s.value = lhs + s.value;
+			});
+
+			return suggestions;
+		};
+
+		$scope.ac_option_delimited = {
+			suggest: suggest_state_delimited
+		};
+	});
 
 	home.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/', {
@@ -190,33 +228,6 @@ define([
 	}]);
 
 	// new post form
-	/*home.directive("autoComplete", ['$parse', '$http',
-		function($http, scope, iElement, iAttrs) {
-			return {
-				restrict: "A",
-				replace: true,
-				scope: false,
-				transclude: true,
-				controller: ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-					$scope.names = ["john", "bill", "charlie", "robert", "alban", "oscar", "marie", "celine", "brad", "drew", "rebecca", "michel",
-						"francis", "jean", "paul", "pierre", "nicolas", "alfred", "gerard", "louis", "albert", "edouard", "benoit",
-						"guillaume", "nicolas", "joseph"];
-
-
-					iElement.autocomplete({
-						source: scope[iAttrs.uiItems],
-						select: function () {
-							$timeout(function () {
-								iElement.trigger('input');
-							}, 0);
-						}
-					});
-				}]
-			}
-		}
-	]);*/
-
-	// new post form
 	home.directive("whatsnew", ['$parse', '$http',
 		function($parse, $http, $compile, $templateCache) {
 			return {
@@ -230,7 +241,30 @@ define([
 	            };	          
 	        },
 		    templateUrl: "home/whatsnew.html",				
-		    controller: ['$scope', '$http', '$filter', 'Dialogs', '$localStorage', 'Main', function ($scope, $http, $filter, Dialogs, $localStorage, Main) {
+		    controller: ['$scope', '$http', '$filter', 'Dialogs', '$localStorage', 'Main',
+				function ($scope, $http, $filter, Dialogs, $localStorage, Main) {
+
+				$scope.dirty = {};
+
+				var states = ['Alabama', 'Alaska', 'California'];
+
+				function suggest_state_delimited(term) {
+					var ix = term.lastIndexOf(','),
+						lhs = term.substring(0, ix + 1),
+						rhs = term.substring(ix + 1),
+						suggestions = suggest_state(rhs);
+
+					suggestions.forEach(function (s) {
+						s.value = lhs + s.value;
+					});
+
+					return suggestions;
+				};
+
+				$scope.ac_option_delimited = {
+					suggest: suggest_state_delimited
+				};
+
 				$scope.post = function(valid) {
 					if (valid) {
 						// get user logged
@@ -245,7 +279,7 @@ define([
 											$scope.user = res.user;
 											var postData = {userid:res.user.userid};
 											// get categories
-											var categoriesRaw = $scope.categories.split(",");
+											var categoriesRaw = $scope.categories.title.split(",");
 											var categories = [];
 											for (var i = 0; i < categoriesRaw.length; i++) {
 												if (categoriesRaw[i].length > 0) {
