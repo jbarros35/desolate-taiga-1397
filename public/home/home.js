@@ -13,11 +13,39 @@ define([
 	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll',
 		'myapp.utils','angularRestfulAuth','ngSanitize', 'MassAutoComplete']);
 
-	home.controller('categoryController', function ($scope, $sce, $q) {
 
-		var states = ['Alabama', 'Alaska', 'California', 'New york'];
+	home.factory('tagService', function ($http, $q) {
+		return {
+			getTags: function(q) {
+				// the $http API is based on the deferred/promise APIs exposed by the $q service
+				// so it returns a promise for us by default
+				return $http.get('/api/posts/findTags?name='+q)
+					.then(function(response) {
+						if (typeof response.data === 'object') {
+							return response.data;
+						} else {
+							// invalid response
+							return $q.reject(response.data);
+						}
+
+					}, function(response) {
+						// something went wrong
+						return $q.reject(response.data);
+					});
+			}
+		};
+	});
+
+	home.controller('categoryController', function ($scope, $http, tagService, $sce, $q) {
+
+		var states = ['Alabama', 'Alaska', 'California','New York', 'Utah' ];
 
 		function suggest_state(term) {
+
+			var ix = term.lastIndexOf(','),
+				lhs = term.substring(0, ix + 1),
+				rhs = term.substring(ix + 1);
+			term = rhs;
 			var q = term.toLowerCase().trim();
 			var results = [];
 
@@ -28,24 +56,43 @@ define([
 					results.push({ label: state, value: state });
 			}
 
-			return results;
-		}
-
-		function suggest_state_delimited(term) {
-			var ix = term.lastIndexOf(','),
-				lhs = term.substring(0, ix + 1),
-				rhs = term.substring(ix + 1),
-				suggestions = suggest_state(rhs);
+			var suggestions = results;
 
 			suggestions.forEach(function (s) {
 				s.value = lhs + s.value;
 			});
 
 			return suggestions;
-		};
+
+		}
+
+		/*
+		function suggest_state(term) {
+			var q = term.toLowerCase().trim();
+			var results = [];
+
+			$http.get('/api/posts/findTags?name='+q).success(function(res){
+				for (var i = 0; i < res.length && res.length < 10; i++) {
+					results.push({ label: res[i].description, value: res[i].description });
+				}
+				return results;
+			}).error(function(err){
+				console.log(err);
+			});
+
+			return results;
+		}
+		*/
+
+		function suggest_state_remote(term) {
+			var deferred = $q.defer();
+			deferred.resolve(suggest_state(term));
+			return deferred.promise;
+		}
 
 		$scope.ac_option_delimited = {
-			suggest: suggest_state_delimited
+			suggest: suggest_state_remote,
+			on_error: console.log
 		};
 	});
 
@@ -243,27 +290,6 @@ define([
 		    templateUrl: "home/whatsnew.html",				
 		    controller: ['$scope', '$http', '$filter', 'Dialogs', '$localStorage', 'Main',
 				function ($scope, $http, $filter, Dialogs, $localStorage, Main) {
-
-				$scope.dirty = {};
-
-				var states = ['Alabama', 'Alaska', 'California'];
-
-				function suggest_state_delimited(term) {
-					var ix = term.lastIndexOf(','),
-						lhs = term.substring(0, ix + 1),
-						rhs = term.substring(ix + 1),
-						suggestions = suggest_state(rhs);
-
-					suggestions.forEach(function (s) {
-						s.value = lhs + s.value;
-					});
-
-					return suggestions;
-				};
-
-				$scope.ac_option_delimited = {
-					suggest: suggest_state_delimited
-				};
 
 				$scope.post = function(valid) {
 					if (valid) {
@@ -468,25 +494,6 @@ define([
 			}]
 			};
 	}]);
-	/*
-	home.directive('myMaxlength', function() {
-		return {
-		require: 'ngModel',
-		link: function (scope, element, attrs, ngModelCtrl) {
-		  var maxlength = Number(attrs.myMaxlength);
-		  function fromUser(text) {
-			  if (text.length > maxlength) {
-				var transformedInput = text.substring(0, maxlength);
-				ngModelCtrl.$setViewValue(transformedInput);
-				ngModelCtrl.$render();
-				return transformedInput;
-			  }
-			  return text;
-		  }
-		  ngModelCtrl.$parsers.push(fromUser);
-		}
-	  };
-	});
-	*/
+
 });
 
