@@ -1,17 +1,15 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var jwt    = require('jsonwebtoken');
-var routes = require('./routes/index');
 
 var app = express();
 var router = express.Router();
 // import services
 var users = require('./routes/users');
 var posts = require('./routes/posts');
+var env = require('./routes/env');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -36,6 +34,7 @@ app.use('/api', router);
 // set services endpoints
 app.use('/api/users', users);
 app.use('/api/posts', posts);
+app.use('/api/env', env);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

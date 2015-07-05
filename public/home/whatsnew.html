@@ -5,24 +5,24 @@
 			 <input type="text" class="form-control vresize" placeholder="Post Title" ng-model="title" required ng-maxlength="30"/>
 		 </div>
 	   <div class="form-group">
-		<textarea class="form-control vresize" rows="5" placeholder="Update your status, the first phrase before break will be your title post." ng-model="description" required my-maxlength="1024"></textarea>
+		<textarea class="form-control vresize" rows="5" placeholder="Update your status" ng-model="description" required my-maxlength="1024"></textarea>
 	  </div>
 
 
-	   <div ng-controller="categoryController" class="form-group">
-		   <div mass-autocomplete>
+	   <!--<div ng-controller="categoryController" class="form-group">-->
+		   <div mass-autocomplete class="form-group">
 			   <input type="text" placeholder="Select categories (separated by commas)"
-					  class="form-control ng-isolate-scope ng-valid ng-dirty" ng-model="dirty.country_delimited"
-					  mass-autocomplete-item="ac_option_delimited" autocomplete="off">
+					  class="form-control ng-isolate-scope ng-valid ng-dirty" ng-model="categoriesRaw"
+					  mass-autocomplete-item="ac_option_delimited" autocomplete="off"
+					  ng-valid-pattern="/^[a-zA-Z0-9,]*$/" required ng-maxlength="155"/>
 		   </div>
-	   </div>
+	   <!--</div>-->
 
 	  <button class="btn btn-success pull-right" type="submit" ng-disabled="postForm.$invalid">Post</button>
 	
 	 <ul class="list-inline">
-	  <li><a href=""></a></li>
-	  <li><a href=""></a></li>
-	  <li><a href=""></a></li></ul>
+	  <li ng-repeat="category in categories"><a href="">{{category}}</a></li>
+	 </ul>
 	  
 	</form>
 </div>

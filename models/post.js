@@ -15,6 +15,8 @@ module.exports = function(sequelize, DataTypes) {
 	userid: DataTypes.INTEGER,
 	embed: DataTypes.TEXT,
 	type: DataTypes.INTEGER,
+	featured: {type: DataTypes.BOOLEAN,
+		defaultValue: false},
 	commentsenabled: {
 		type:DataTypes.BOOLEAN,
 		defaultValue: true

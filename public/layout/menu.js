@@ -37,7 +37,6 @@ define([
 			link: function($scope, element, attrs) {
 	            $scope.changeLogged = function(log) {
 	                $scope.logged = log;
-	                console.log('link: changeLogged');
 	            };	          
 	        },
 		    templateUrl: "layout/drop-down.html",					
