@@ -14,7 +14,7 @@ router.get('/postsLast24h', function(req, res) {
 			order: '"createdAt" DESC',
 			order: 'postid asc',
 			attributes: ['postid', 'title','shortdescription','link','titleimage','commentsenabled','type','embed','createdAt'],
-			//where:['"createdAt" between ? and ?', yesterday, today]
+			where:['featured = ?', false],
 			include: [                
 				/*{
                     model: models.profile, as: 'Profile', attributes: ['profileid','nickname']
@@ -41,6 +41,17 @@ router.get('/viewpost', function(req, res) {
 			res.json(posts);
 		});
 });
+
+router.get('/getFeaturedPosts', function(req, res) {
+	models.post.findAll({
+		attributes: ['postid', 'title', 'titleimage'],
+		where: {featured:true},
+		order: '"createdAt" desc'
+	}).then(function(posts){
+		res.json(posts);
+	});
+});
+
 // save a new post
 router.post('/', secret.ensureAuthorized, function(req, res) {
 	

@@ -13,10 +13,9 @@ define([
 	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll',
 		'myapp.utils','angularRestfulAuth','ngSanitize', 'MassAutoComplete']);
 
-
 	home.factory('tagService', function ($http, $q) {
 		return {
-			getTags: function(q) {
+			findTags: function(q) {
 				// the $http API is based on the deferred/promise APIs exposed by the $q service
 				// so it returns a promise for us by default
 				return $http.get('/api/posts/findTags?name='+q)
@@ -25,64 +24,125 @@ define([
 							return response.data;
 						} else {
 							// invalid response
-							return $q.reject(response.data);
+							return $q.reject(response);
 						}
 
 					}, function(response) {
 						// something went wrong
-						return $q.reject(response.data);
+						return $q.reject(response);
 					});
+			},
+			getTags: function() {
+				return $http.get('/api/posts/tags').then(function(response){
+					if (typeof response.data === 'object') {
+						return response.data;
+					} else {
+						// invalid response
+						return $q.reject(response);
+					}
+				}, function(response) {
+					// something went wrong
+					return $q.reject(response);
+				});
 			}
 		};
 	});
 
-	home.controller('categoryController', function ($scope, $http, tagService, $sce, $q) {
+	home.factory('postService', function ($http, $q) {
+		return {
+			commentsForPost: function(postid) {
+				// the $http API is based on the deferred/promise APIs exposed by the $q service
+				// so it returns a promise for us by default
+				return $http.get('/api/posts/commentsForPost?postid='+postid)
+					.then(function(response) {
+						if (typeof response.data === 'object') {
+							return response.data;
+						}
+					}, function(response) {
+						// something went wrong
+						return $q.reject(response);
+					});
+			},
+			saveComment: function(comment) {
+				return $http.post('/api/posts/comment', comment)
+					.then(function(response){
+					if (typeof response.data === 'object') {
+						return response.data;
+					}
+				}, function(response) {
+					// something went wrong
+					return $q.reject(response);
+				});
+			},
+			viewPost: function(postid) {
+				return $http.get('/api/posts/viewpost?postid='+postid).then(function(response) {
+					if (typeof response.data === 'object') {
+						return response.data;
+					}
+				}, function(response) {
+					// something went wrong
+					return $q.reject(response);
+				});
+			},
+			savePost: function(postData){
+				return $http.post('/api/posts/', postData)
+					.then(function(res){
+						return response.data;
+					}, function(err){
+						return $q.reject(response);
+					})
+			},
+			fetchPosts: function(page, limit) {
+				return $http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
+					.then(function(response){
+						if (typeof response.data === 'object') {
+							return response.data;
+						}
+					}, function(response) {
+						// something went wrong
+						return $q.reject(response);
+					})
+			},
+			featuredPosts: function() {
+				return $http.get('api/posts/getFeaturedPosts').then(function(response){
+					if (typeof response.data === 'object') {
+						return response.data;
+					}
+				}, function(response) {
+					// something went wrong
+					return $q.reject(response);
+				})
+			}
+		};
+	});
 
-		var states = ['Alabama', 'Alaska', 'California','New York', 'Utah' ];
+	home.controller('categoryController', function ($scope, tagService, $sce, $q) {
 
 		function suggest_state(term) {
-
+			var results = [];
 			var ix = term.lastIndexOf(','),
 				lhs = term.substring(0, ix + 1),
 				rhs = term.substring(ix + 1);
 			term = rhs;
 			var q = term.toLowerCase().trim();
-			var results = [];
 
-			// Find first 10 states that start with `term`.
-			for (var i = 0; i < states.length && results.length < 10; i++) {
-				var state = states[i];
-				if (state.toLowerCase().indexOf(q) === 0)
-					results.push({ label: state, value: state });
-			}
-
-			var suggestions = results;
-
-			suggestions.forEach(function (s) {
-				s.value = lhs + s.value;
-			});
-
-			return suggestions;
-
-		}
-
-		/*
-		function suggest_state(term) {
-			var q = term.toLowerCase().trim();
-			var results = [];
-
-			$http.get('/api/posts/findTags?name='+q).success(function(res){
-				for (var i = 0; i < res.length && res.length < 10; i++) {
-					results.push({ label: res[i].description, value: res[i].description });
+			return tagService.findTags(q).then(function(data){
+				// Find first 10 states that start with `term`.
+				for (var i = 0; i < data.length && results.length < 10; i++) {
+					var state = data[i].description;
+					if (state.toLowerCase().indexOf(q) === 0)
+						results.push({ label: state, value: state });
 				}
-				return results;
-			}).error(function(err){
-				console.log(err);
-			});
 
-			return results;
+				results.forEach(function (s) {
+					s.value = lhs + s.value;
+				});
+
+				return results;
+			},  function(error) {
+				console.log(error);
+			});
 		}
-		*/
 
 		function suggest_state_remote(term) {
 			var deferred = $q.defer();
@@ -90,8 +150,20 @@ define([
 			return deferred.promise;
 		}
 
+		function setCategories(selected) {
+			$scope.categories = undefined;
+			console.log($scope.categories);
+			$scope.setCategories(selected.label);
+		}
+
+		$scope.updateCategories = function(selected) {
+			console.log($scope.categoriesRaw);
+			//$scope.updateCategoriesRaw(selected);
+		}
+
 		$scope.ac_option_delimited = {
 			suggest: suggest_state_remote,
+			on_select: setCategories,
 			on_error: console.log
 		};
 	});
@@ -107,46 +179,49 @@ define([
 	}]);
 	
 	//tagCtrl	
-	home.directive("hashtags", ['$http', 
-		function($http) {
+	home.directive("hashtags", [
+		function() {
 		return {
 				restrict: "A",
 				replace: true,
 				scope: false,
 				transclude: true,			
 				templateUrl: "home/hashtags.html",				
-				controller: ['$scope', '$http', function ($scope, $http) {
-					// select all tags
-					$http.get('/api/posts/tags').success(function(res) {
-						if (res) {
-							$scope.hashtags = res;
-						}	
+				controller: ['$scope', '$http', 'tagService', function ($scope, $http, tagService) {
+					tagService.getTags().then(function(data){
+						if (data) {
+							$scope.hashtags = data;
+						}
+					},  function(error) {
+						console.log(error);
 					});
+
 				}]
 			};
 		}
 	]);
 	
 	//
-	home.controller('postCtrl', ['$scope', '$http', '$routeParams', 'Main', 'ngDialog', 
-	                             function($scope,$http,$routeParams,Main,ngDialog) {		
+	home.controller('postCtrl', ['$scope', '$http', '$routeParams', 'Main', 'postService', 'ngDialog',
+		function($scope,$http,$routeParams,Main,postService,ngDialog) {
+
 		// load post data
-		$http.get('/api/posts/viewpost?postid='+$routeParams.id)
-				.success(function(res) {
+		postService.viewPost($routeParams.id).then(function(res){
 			if (res) {
 				$scope.post = res;
-			}	
+			}
 		});
-		$scope.comments = [];
-		$scope.comment = {};
+			 $scope.comments = [];
+			 $scope.comment = {};
+
 		// load comments
 		$scope.loadcomments = function() {
-			$http.get('/api/posts/commentsForPost?postid='+$routeParams.id)
-				.success(function(res) {
-					if (res) {
-						$scope.comments = res;
-					}	
-			});	
+			postService.commentsForPost($routeParams.id).then(function(res){
+				if (res) {
+					$scope.comments = res;
+				}
+			});
+
 		}
 		$scope.loadcomments();
 		// post a new comment
@@ -157,8 +232,16 @@ define([
 				Main.me(function(res) {
 					$scope.comment.userid = res.user.userid;
 					$scope.comment.postid =  $routeParams.id;
-								
-					$http.post('/api/posts/comment', $scope.comment).success(function(res) {
+						postService.saveComment($scope.comment).then(function(res){
+							// reload comments
+							$scope.loadcomments();
+							//$scope.comments.push($scope.comment);
+							$scope.comment = null;
+						}, function(error){
+							$scope.error = error.data;
+							ngDialog.open({ template: 'layout/errormsg.html', scope: $scope });
+						});
+					/*$http.post('/api/posts/comment', $scope.comment).success(function(res) {
 						// reload comments
 						$scope.loadcomments();
 						//$scope.comments.push($scope.comment);
@@ -166,7 +249,7 @@ define([
 					}).error(function(err) {
 						$scope.error = err.data;
 						ngDialog.open({ template: 'layout/errormsg.html', scope: $scope });
-					});
+					});*/
 				},
 				function(err) {		
 					$scope.error = err.data;
@@ -187,7 +270,37 @@ define([
         };
     }]);
 
-	home.controller('homeCtrl', ['$scope', '$http', '$interval', '$window',function($scope,$http,$interval,$window) {
+	home.controller('carouselCtrl',['$scope','postService',
+		function($scope,postService) {
+			$scope.myInterval = 5000;
+			var slides = $scope.slides = [];
+			postService.featuredPosts().then(function(res){
+				for (var i=0; i<res.length; i++) {
+					slides.push({
+						image: res[i].titleimage,
+						text: res[i].title
+					});
+				}
+			}, function(err) {
+				console.log(err);
+			});
+			/*
+			$scope.addSlide = function() {
+				var newWidth = 600 + slides.length + 1;
+				slides.push({
+					image: 'http://placekitten.com/' + newWidth + '/300',
+					text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
+					['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
+				});
+			};
+			for (var i=0; i<10; i++) {
+				$scope.addSlide();
+			}*/
+		}
+	]);
+
+	home.controller('homeCtrl', ['$scope', '$http', '$interval', '$window','postService',
+		function($scope,$http,$interval,$window,postService) {
 				
 		var page = 0;
 		var limit = 10;
@@ -200,38 +313,38 @@ define([
 				return;
 			}
 			$scope.busy = true;		
-			$http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
-				.success(function(res) {
-					if (res && res.length > 0) {
-						hasmore = true;
-					} else {
-						hasmore = false;
-					}
-					if (res instanceof Array) {
-						$scope.posts = $scope.posts.concat(res);
-					} else {
-						$scope.posts.push(res);
-					}
-					if (hasmore) {
-						page+=limit;
-					}
+			//$http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
+			//	.success(function(res) {
+			postService.fetchPosts(page,limit).then(function(res){
+				if (res && res.length > 0) {
+					hasmore = true;
+				} else {
+					hasmore = false;
+				}
+				if (res instanceof Array) {
+					$scope.posts = $scope.posts.concat(res);
+				} else {
+					$scope.posts.push(res);
+				}
+				if (hasmore) {
+					page+=limit;
+				}
 
-					// calculate the size of screen and how many columns
-					
-					var columns = 3;
-					var width = windowEl.width();
-					if (width < 1000 && width > 766) {
-						columns = 2;
-					} else if (width < 760) {
-						columns = 1;
-					}
-					
-					$scope.columns = columnize($scope.posts, columns);
-					$scope.busy = false;
-				})
-				.error(function(err) {
-					console.log(err);
-				});
+				var columns = 3;
+				var width = windowEl.width();
+				if (width < 1000 && width > 766) {
+					columns = 2;
+				} else if (width < 760) {
+					columns = 1;
+				}
+
+				$scope.columns = columnize($scope.posts, columns);
+				$scope.busy = false;
+				// calculate the size of screen and how many columns
+
+			}, function(err){
+				console.log(err);
+			});
 		};
 		// dinamically adjusts window size and posts blocks
 		$(window).on("resize.doResize", function (){
@@ -253,13 +366,6 @@ define([
 			 $(window).off("resize.doResize"); //remove the handler added earlier
 		});
 		
-		function print(input) {
-		 var i;		  
-		  for(i = 0; i < input.length; i++) {
-			console.log(input[i].id);
-		  }
-		}
-		
 		// transform data in columns
 		function columnize(input, cols) {
 		  var i;
@@ -275,8 +381,9 @@ define([
 	}]);
 
 	// new post form
-	home.directive("whatsnew", ['$parse', '$http',
-		function($parse, $http, $compile, $templateCache) {
+	home.directive("whatsnew", ['$parse', '$http','$q',
+		function($parse, $http, $compile, $templateCache, $q) {
+
 			return {
 		    restrict: "A",
 		    replace: true,
@@ -285,11 +392,69 @@ define([
 			link: function($scope, element, attrs) {
 	            $scope.changeLogged = function(log) {
 	                $scope.logged = log;
-	            };	          
+	            };
+				$scope.setCategories = function(selected) {
+					if (!$scope.categories) {
+						$scope.categories = [];
+					}
+					$scope.categories.push(selected);
+				}
+				$scope.updateCategoriesRaw = function (evt) {
+					var value = evt.value;
+					$scope.categoriesRaw = value;
+				}
 	        },
 		    templateUrl: "home/whatsnew.html",				
-		    controller: ['$scope', '$http', '$filter', 'Dialogs', '$localStorage', 'Main',
-				function ($scope, $http, $filter, Dialogs, $localStorage, Main) {
+		    controller: ['$scope', '$filter', 'Dialogs', '$localStorage', 'Main','$q','tagService',
+				function ($scope, $filter, Dialogs, $localStorage, Main, $q, tagService) {
+					var categoriesRaw = {};
+					console.log($q);
+					// mass autocomplete
+					function suggest_state(term) {
+						var results = [];
+						var ix = term.lastIndexOf(','),
+							lhs = term.substring(0, ix + 1),
+							rhs = term.substring(ix + 1);
+						term = rhs;
+						var q = term.toLowerCase().trim();
+
+						return tagService.getTags(q).then(function(data){
+							// Find first 10 states that start with `term`.
+							for (var i = 0; i < data.length && results.length < 10; i++) {
+								var state = data[i].description;
+								if (state.toLowerCase().indexOf(q) === 0)
+									results.push({ label: state, value: state });
+							}
+
+							results.forEach(function (s) {
+								s.value = lhs + s.value;
+							});
+
+							return results;
+						},  function(error) {
+							console.log(error);
+						});
+					}
+
+					function suggest_state_remote(term) {
+						var deferred = $q.defer();
+						deferred.resolve(suggest_state(term));
+						return deferred.promise;
+					}
+
+					function setCategories(selected) {
+						$scope.categoriesRaw = undefined;
+						$scope.setCategories(selected.label);
+					}
+
+					$scope.ac_option_delimited = {
+						suggest: suggest_state_remote,
+						on_select: setCategories,
+						on_error: console.log
+					};
+
+					// mass autocomplete
+
 
 				$scope.post = function(valid) {
 					if (valid) {
@@ -303,16 +468,29 @@ define([
 											$scope.myDetails = res;
 										} else {
 											$scope.user = res.user;
-											var postData = {userid:res.user.userid};
+											var postData = {
+												userid:res.user.userid,
+												title:$scope.title
+											};
 											// get categories
-											var categoriesRaw = $scope.categories.title.split(",");
+											//var categoriesRaw = $scope.categoriesRaw.split(',');
+											var categoriesScope = $scope.categories;
 											var categories = [];
+											// categories inside input
 											for (var i = 0; i < categoriesRaw.length; i++) {
 												if (categoriesRaw[i].length > 0) {
 													categories.push(
 														{description: categoriesRaw[i].trim().toLowerCase()});
 												}
 											}
+											// append categories into scope
+											for (var i = 0; i < categoriesScope.length; i++) {
+												if (categoriesScope[i].length > 0 && categoriesRaw.indexOf(categoriesScope[i]) == -1){
+													categories.push(
+														{description: categoriesScope[i].trim().toLowerCase()});
+												}
+											}
+
 											postData.categories = categories;
 
 											// check if there is embeded code
@@ -320,12 +498,8 @@ define([
 											// if is not embed
 											if (!regex.test($scope.description)) {
 												postData.description = $scope.description;
+												// set type to 1 not embed
 												postData.type=1;
-												// get title if exists
-												var linebreaks = $scope.description.split("\n");
-												if (linebreaks[0]) {
-													postData.title = linebreaks[0].substring(0,140);
-												}
 												// extract urls
 												var urls = findUrls($scope.description);
 												var images = [];
@@ -342,6 +516,7 @@ define([
 													}
 												}
 												var imageLoaded = null;
+												// check if has images
 												if (hasImages) {
 													// get first image that loads on time
 													for (i = 0; i < images.length; i++) {
@@ -353,6 +528,7 @@ define([
 																	postData.link=$scope.link[0];
 																	postData.titleImage= imageLoaded;
 																};
+																// save post after loaded and tested images
 																savePost(postData);
 
 															}, 1000);
@@ -361,12 +537,14 @@ define([
 
 												} else {
 													postData.link=$scope.link[0];
+													// save post
 													savePost(postData);
 												}
 											} else {
 												// in case of embed posts
 												postData.type=2;
 												postData.embed = $scope.description;
+												// save post
 												savePost(postData)
 											}
 										}
@@ -387,6 +565,15 @@ define([
 				};
 				// save post using service
 				function savePost(postData) {
+					postService.savePost(postData).then(function(res){
+						$scope.description = null;
+						$scope.images = [];
+						$scope.link = [];
+					}, function(err){
+						Dialogs.showMsg(err, 'error', $scope);
+						console.log(err);
+					});
+					/*
 					$http.post('/api/posts/', postData)
 						.success(function(res) {
 							$scope.description = null;	
@@ -396,7 +583,7 @@ define([
 						.error(function(err) {
 							Dialogs.showMsg(err, 'error', $scope);
 							console.log(err);
-						});
+						});*/
 				}
 				
 				function findUrls( text )
@@ -448,52 +635,5 @@ define([
 			}]
 			};
 	}]);
-	// display all posts in the home page
-	home.directive("posts", ['$parse', '$http',  
-		function($parse, $http, $compile, $templateCache) {
-			 return {
-		    restrict: "A",
-		    replace: true,
-		    scope: false,
-		    transclude: true,
-			link: function($scope, element, attrs) {
-	            $scope.addpost = function(post) {
-	                $scope.posts.push(post);
-	            };	          
-	        },
-		    templateUrl: "home/post.html",				
-		    controller: ['$scope', '$http', '$interval', 
-			function ($scope, $http, $interval) {								
-				//$scope.posts = [];
-				$scope.fetchPosts = function() {					
-					
-					$http.get('/api/posts/postsLast24h')
-						.success(function(res) {							
-							if (res instanceof Array) {
-								$scope.posts = res;
-							} else {
-								if ($scope.posts) {							
-									$scope.posts.push(res);
-								} else {
-									$scope.posts = [];
-									$scope.posts.push(res);
-								}
-							}							
-						})
-						.error(function(err) {
-							console.log(err);
-						});
-					
-				};
-				
-				// first fetch
-				$scope.fetchPosts();
-				
-				// fetch posts of last 24h at some interval
-			    //$interval(function() {$scope.fetchPosts();}, 5000);		
-			}]
-			};
-	}]);
 
 });
-

@@ -1,12 +1,30 @@
 <div>
 <div class="row">
-	<div hashtags="true"></div>
+	<div class="col-md-4 col-sm-4">
+		<div hashtags="true"></div>
+	</div>
+
 	
-	<div class="col-md-6 col-sm-6">
-      	 <div whatsnew></div>	 
+	<div class="col-md-8 col-sm-8" ng-controller="carouselCtrl">
+		<div class="panel panel-default">
+		<div class="panel-body">
+		<carousel interval="myInterval">
+			<slide ng-repeat="slide in slides" active="slide.active">
+				<img ng-src="{{slide.image}}" class="img-responsive" style="margin:auto;">
+				<div class="carousel-caption">
+					<p><a href="" style="color: white">{{slide.text}}</a></p>
+				</div>
+			</slide>
+		</carousel>
+		</div>
+		</div>
   	</div>
 
 </div>
+	<div class="col-md-12">
+		<div class="clearfix"></div>
+	</div>
+
 <div ng-controller="homeCtrl" class="row" infinite-scroll='fetchPosts()' infinite-scroll-disabled="busy" infinite-scroll-distance='0'>	
 	<div ng-repeat="row in columns" class="col-md-4 col-sm-6" >
 		<div ng-repeat="post in row">

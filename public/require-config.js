@@ -29,7 +29,8 @@ require.config({
 		ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
 		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
 		'angular-sanitize' : 'bower_components/angular-sanitize/angular-sanitize.min',
-		'mass-complete':'bower_components/angular-mass-autocomplete/massautocomplete.min'
+		'mass-complete':'bower_components/angular-mass-autocomplete/massautocomplete.min',
+		'angular-touch':'bower_components/angular-touch/angular-touch'
 	},
 	shim: {
 		'angular' : {'exports' : 'angular'},

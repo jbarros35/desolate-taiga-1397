@@ -53,6 +53,19 @@ module.exports = {
 						title: "Foster the People",
 						embed: "<iframe src=\"https://www.youtube.com/embed/SDTZ7iX4vTQ\" class=\"img-responsive\" frameborder=\"0\" allowfullscreen></iframe>",
 						type: 2});
+				posts.push({userid: profile.profileid,
+					title: "Grouplove",
+					titleimage: 'assets/img/postsImg/grouplove600.jpg',
+					type:2, featured:true});
+				posts.push({userid: profile.profileid,
+						title: "Grouplove",
+						titleimage: 'assets/img/postsImg/grouplove_colours.jpg',
+						type:2, featured:true});
+				posts.push({userid: profile.profileid,
+						title: "Foster The People",
+						titleimage: 'assets/img/postsImg/fosterthepeople.jpg',
+						type:2, featured:true});
+
 		  //}		
 
 		for (var i = 0; i < posts.length;i++) {
