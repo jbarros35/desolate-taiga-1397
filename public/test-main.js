@@ -19,14 +19,14 @@ for (var file in window.__karma__.files) {
 
 require.config({
   // Karma serves files under /base, which is the basePath from your config file
-  baseUrl: '/base/public',
+  baseUrl: '',
 
   paths: {
     angular: '/bower_components/angular/angular',
     angularMocks: '/bower_components/angular-mocks/angular-mocks',
-    'jquery': '/bower_components/jquery/dist/jquery',
+    'jquery': 'bower_components/jquery/dist/jquery',
     'jasmine-core': '../node_modules/jasmine-core/lib/jasmine-core',
-    'app':'app'
+    'app':'/public/app'
   },
   shim: {
     angular: { exports: 'angular' },
