@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '.',
 
 
     // frameworks to use
@@ -15,13 +15,13 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test-main.js',
       {pattern: 'bower_components/angular/angular.js', included: false},
-      {pattern: 'bower_components/angular/angular-mocks.js', included: false},
+      {pattern: 'bower_components/angular-mocks/angular-mocks.js', included: false},
       {pattern: 'bower_components/bootstrap/dist/js/bootstrap.js', included: false},
       {pattern: 'bower_components/jquery/dist/jquery.min.js', included: false},
-      {pattern: 'public/**/*.js', included: false},
-      {pattern: 'public/test/*.js', included: false}
+      'test-main.js',
+      {pattern: 'app.js', included: false},
+      {pattern: 'test/*.js', included: false}
     ],
 
 
@@ -33,6 +33,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'public/**/*.js': 'coverage'
     },
 
 
@@ -61,7 +62,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode

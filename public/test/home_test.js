@@ -1,21 +1,17 @@
 /**
  * Created by jose on 7/6/2015.
  */
+define(['../app', 'jquery'], function(App, $) {
 
-define(['angular'], function(angular){
+    beforeEach(module('myApp'));
 
-    describe('Unit: Testing RequireJS', function(){
-        var ctrl;
-        var scope;
-        var rootScope;
+    describe('Calculator ', function() {
 
-        beforeEach(angular.mock.module('myApp.home'));
+        it('should add two numbers correctly', function() {});
+        it('should subtract two numbers correctly', function() {});
 
-        beforeEach(angular.mock.inject(function($rootScope){
-            scope = $rootScope.$new();
-            rootScope = $rootScope;
-        }));
-
+        it('should add negative numbers', function() { });
+        it('should reject non numbers', function() { });
     });
-});
 
+});
