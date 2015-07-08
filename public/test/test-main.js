@@ -25,18 +25,33 @@ require.config({
 
   paths: {
     angular: '/bower_components/angular/angular',
-    angularRoute:   '/bower_components/angular-route/angular-route',
     angularMocks: '/bower_components/angular-mocks/angular-mocks',
+    angularRoute:   '/bower_components/angular-route/angular-route',
     'angular-resource': '../bower_components/angular-resource/angular-resource',
+    'angular-sanitize' : 'bower_components/angular-sanitize/angular-sanitize.min',
+    'angular-touch':'bower_components/angular-touch/angular-touch',
+    'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
+    'ngStorage' : '/bower_components/ngstorage/ngStorage.js',
+    'ngDialog': '/bower_components/ngDialog/js/ngDialog.js',
     'jquery': '../bower_components/jquery/dist/jquery',
+    'mass-complete':'bower_components/angular-mass-autocomplete/massautocomplete.min',
+    'ngStorage': 'bower_components/ngstorage/ngStorage.min',
+    ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
+    text: 		 'bower_components/requirejs-text/text',
     'jasmine-core': '../../node_modules/jasmine-core/lib/jasmine-core',
+    'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
     'app':'/app'
   },
   shim: {
     angular: { exports: 'angular' },
     'angularRoute': ['angular'],
     'angular-resource': ['angular'],
-    angularMocks: { deps: ['angular'] }
+    angularMocks: { deps: ['angular'] },
+    'ui-bootstrap': ['angular'],
+    'ngStorage': ['angular'],
+    'ngDialog': ['angular'],
+    'angular-sanitize':['angular'],
+    'mass-complete':['angular-sanitize']
   },
 
   // dynamically load all test files

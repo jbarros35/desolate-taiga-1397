@@ -18,39 +18,28 @@ module.exports = function(config) {
       'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-route/angular-route.js',
-      'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-resource/angular-resource.js',
-      //'bower_components/ngstorage/ngStorage.js',
-      //'bower_components/ngDialog/js/ngDialog.js',
-      'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
-      'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-sanitize/angular-sanitize.js',
+      'bower_components/angular-loader/angular-loader.js',
       'bower_components/bootstrap/dist/js/bootstrap.js',
-     /* {pattern: 'bower_components/jquery/dist/jquery.js', included: false},
-      {pattern: 'bower_components/angular/angular.js', included: false},
-      {pattern:'bower_components/angular-route/angular-route.js', included:false},
-      {pattern:'bower_components/angular-bootstrap/ui-bootstrap-tpls.js', included:false},
-      {pattern:'bower_components/angular-resource/angular-resource.js', included:false},
-      {pattern:'bower_components/ngstorage/ngStorage.js', included:false},
-      {pattern:'bower_components/ngDialog/js/ngDialog.js', included:false},
-      {pattern:'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js', included:false},
-      {pattern:'bower_components/angular-sanitize/angular-sanitize.js', included:false},
-      {pattern: 'bower_components/angular-mocks/angular-mocks.js', included: false},
-      {pattern: 'bower_components/bootstrap/dist/js/bootstrap.js', included: false},*/
+      'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
       'test/test-main.js',
-      //'home/home.js',
+      {pattern: 'app.js', included: false},
+//      {pattern: 'require-config.js', included: false},
       //'login/login.js',
       //'layout/utils.js',
+      //'home/home.js',
       //'layout/menu.js',
-      //{pattern: 'require-config.js', included: false},
-      {pattern: 'app.js', included: false},
+
+
       {pattern: 'test/*.js', included: false}
     ],
 
 
     // list of files to exclude
     exclude: [
-        'app.js'
+        '/bower_components/crypto-js/**'
     ],
 
 

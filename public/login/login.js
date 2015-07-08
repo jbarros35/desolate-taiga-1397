@@ -1,10 +1,5 @@
 'use strict';
- define([
-	'angular',
-	'angularRoute',
-	'ngStorage',
-	'ngDialog'
-], function(angular) {	
+ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
   
 /* Controllers */
  var login = angular.module('angularRestfulAuth', ['ngRoute','ngStorage']);
