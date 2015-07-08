@@ -15,11 +15,34 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'bower_components/jquery/dist/jquery.js',
+      'bower_components/angular/angular.js',
+      'bower_components/angular-route/angular-route.js',
+      'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'bower_components/angular-resource/angular-resource.js',
+      //'bower_components/ngstorage/ngStorage.js',
+      //'bower_components/ngDialog/js/ngDialog.js',
+      'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
+      'bower_components/angular-sanitize/angular-sanitize.js',
+      'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/bootstrap/dist/js/bootstrap.js',
+     /* {pattern: 'bower_components/jquery/dist/jquery.js', included: false},
       {pattern: 'bower_components/angular/angular.js', included: false},
+      {pattern:'bower_components/angular-route/angular-route.js', included:false},
+      {pattern:'bower_components/angular-bootstrap/ui-bootstrap-tpls.js', included:false},
+      {pattern:'bower_components/angular-resource/angular-resource.js', included:false},
+      {pattern:'bower_components/ngstorage/ngStorage.js', included:false},
+      {pattern:'bower_components/ngDialog/js/ngDialog.js', included:false},
+      {pattern:'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js', included:false},
+      {pattern:'bower_components/angular-sanitize/angular-sanitize.js', included:false},
       {pattern: 'bower_components/angular-mocks/angular-mocks.js', included: false},
-      {pattern: 'bower_components/bootstrap/dist/js/bootstrap.js', included: false},
-      {pattern: 'bower_components/jquery/dist/jquery.min.js', included: false},
-      'test-main.js',
+      {pattern: 'bower_components/bootstrap/dist/js/bootstrap.js', included: false},*/
+      'test/test-main.js',
+      //'home/home.js',
+      //'login/login.js',
+      //'layout/utils.js',
+      //'layout/menu.js',
+      //{pattern: 'require-config.js', included: false},
       {pattern: 'app.js', included: false},
       {pattern: 'test/*.js', included: false}
     ],
@@ -27,6 +50,7 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+        'app.js'
     ],
 
 

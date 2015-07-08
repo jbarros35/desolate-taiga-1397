@@ -7,10 +7,12 @@ var TEST_REGEXP = /(spec|test)\.js$/i;
     // Normalize paths to RequireJS module names.
     // If you require sub-dependencies of test files to be loaded as-is (requiring file extension)
     // then do not normalize the paths
-    var normalizedTestModule = file.replace(/^\/base\/|\.js$/g, '');
-    allTestFiles.push(normalizedTestModule);
+   var normalizedTestModule = file.replace(/^\/base\/|\.js$/g, '');
+   allTestFiles.push(normalizedTestModule);
+    //allTestFiles.push(file);
   }
 });*/
+
 for (var file in window.__karma__.files) {
   if (TEST_REGEXP.test(file)) {
     allTestFiles.push(file);
@@ -19,17 +21,21 @@ for (var file in window.__karma__.files) {
 
 require.config({
   // Karma serves files under /base, which is the basePath from your config file
-  baseUrl: '',
+  baseUrl: '/base/www/scripts',
 
   paths: {
     angular: '/bower_components/angular/angular',
+    angularRoute:   '/bower_components/angular-route/angular-route',
     angularMocks: '/bower_components/angular-mocks/angular-mocks',
-    'jquery': 'bower_components/jquery/dist/jquery',
-    'jasmine-core': '../node_modules/jasmine-core/lib/jasmine-core',
-    'app':'/public/app'
+    'angular-resource': '../bower_components/angular-resource/angular-resource',
+    'jquery': '../bower_components/jquery/dist/jquery',
+    'jasmine-core': '../../node_modules/jasmine-core/lib/jasmine-core',
+    'app':'/app'
   },
   shim: {
     angular: { exports: 'angular' },
+    'angularRoute': ['angular'],
+    'angular-resource': ['angular'],
     angularMocks: { deps: ['angular'] }
   },
 

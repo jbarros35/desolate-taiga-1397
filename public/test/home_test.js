@@ -1,14 +1,14 @@
 /**
  * Created by jose on 7/6/2015.
- */
-define([], function() {
+*/
+define(['jquery'], function($) {
+    describe('Calculator ', function() {
 
-    describe('just checking', function() {
+        it('should add two numbers correctly', function() {});
+        it('should subtract two numbers correctly', function() {});
 
-        it('works for app', function() {
-
-        });
-
+        it('should add negative numbers', function() { });
+        it('should reject non numbers', function() { });
     });
 
 });
