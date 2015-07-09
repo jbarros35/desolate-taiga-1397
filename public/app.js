@@ -11,7 +11,7 @@ define([
 	'home/home',
 	'layout/utils',
 	'profile/signup'
-], function(angular, angularRoute) {
+], function(angular) {
 	// Declare app level module which depends on views, and components
 	var app = angular.module('myApp', [
 		'ngRoute',

@@ -21,37 +21,41 @@ for (var file in window.__karma__.files) {
 
 require.config({
   // Karma serves files under /base, which is the basePath from your config file
-  baseUrl: '/base/www/scripts',
+  baseUrl: '/public',
 
   paths: {
-    angular: '/bower_components/angular/angular',
-    angularMocks: '/bower_components/angular-mocks/angular-mocks',
-    angularRoute:   '/bower_components/angular-route/angular-route',
-    'angular-resource': '../bower_components/angular-resource/angular-resource',
-    'angular-sanitize' : 'bower_components/angular-sanitize/angular-sanitize.min',
-    'angular-touch':'bower_components/angular-touch/angular-touch',
-    'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
-    'ngStorage' : '/bower_components/ngstorage/ngStorage.js',
-    'ngDialog': '/bower_components/ngDialog/js/ngDialog.js',
-    'jquery': '../bower_components/jquery/dist/jquery',
-    'mass-complete':'bower_components/angular-mass-autocomplete/massautocomplete.min',
-    'ngStorage': 'bower_components/ngstorage/ngStorage.min',
-    ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
-    text: 		 'bower_components/requirejs-text/text',
+    'angular': '/base/bower_components/angular/angular',
+    'angularMocks': '/base/bower_components/angular-mocks/angular-mocks',
+    /*'angularRoute':   '/base/bower_components/angular-route/angular-route',
+    'angular-resource': '/base/bower_components/angular-resource/angular-resource',
+    'angular-sanitize' : '/base/bower_components/angular-sanitize/angular-sanitize.min',
+    'angular-touch':'/base/bower_components/angular-touch/angular-touch',
+    'ui-bootstrap': '/base/bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
+    'ngStorage' : '/base/bower_components/ngstorage/ngStorage.js',
+    'ngDialog': '/base/bower_components/ngDialog/js/ngDialog.js',
+    'jquery': '/base/bower_components/jquery/dist/jquery',
+    'mass-complete':'/base/bower_components/angular-mass-autocomplete/massautocomplete.min',
+    'ngStorage': '/base/bower_components/ngstorage/ngStorage.min',
+    'ngDialog': '/base/bower_components/ngDialog/js/ngDialog.min',
+    'text': 		 '/base/bower_components/requirejs-text/text',
     'jasmine-core': '../../node_modules/jasmine-core/lib/jasmine-core',
-    'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
-    'app':'/app'
+    'infinite-scroll':'/base/bower_components/ngInfiniteScroll/build/ng-infinite-scroll',*/
+    //'home':'/base/home/home',
+    //'login':'/base/login/login',
+    'test':'/base/test/teste',
+    'app':'/base/app'
   },
   shim: {
-    angular: { exports: 'angular' },
+    'angular': { exports: 'angular' },
+    'angularMocks': { deps: ['angular'] },
+
+   /* 'angular-resource': ['angular'],
     'angularRoute': ['angular'],
-    'angular-resource': ['angular'],
-    angularMocks: { deps: ['angular'] },
     'ui-bootstrap': ['angular'],
     'ngStorage': ['angular'],
     'ngDialog': ['angular'],
     'angular-sanitize':['angular'],
-    'mass-complete':['angular-sanitize']
+    'mass-complete':['angular-sanitize']*/
   },
 
   // dynamically load all test files
@@ -59,6 +63,5 @@ require.config({
 
   // we have to kickoff jasmine, as it is asynchronous
   callback: window.__karma__.start,
-
 
 });

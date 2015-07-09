@@ -1,6 +1,7 @@
 // Karma configuration
 // Generated on Mon Jul 06 2015 22:23:02 GMT-0400 (Horário padrão - Pacífico)
-
+/* global module */
+"use strict";
 module.exports = function(config) {
   config.set({
 
@@ -15,31 +16,47 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/jquery/dist/jquery.js',
+      'test/test-main.js',
+      /*'bower_components/jquery/dist/jquery.js',
+      'bower_components/bootstrap/dist/css/bootstrap.min.css',
+      'bower_components/angular-mass-autocomplete/massautocomplete.theme.css',
+      'bower_components/ngDialog/css/ngDialog.css',
+      'bower_components/ngDialog/css/ngDialog-theme-default.css',*/
+      //'bower_components/requirejs/require.js',
       'bower_components/angular/angular.js',
       'bower_components/angular-route/angular-route.js',
-      'bower_components/angular-resource/angular-resource.js',
+      //'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/angular-sanitize/angular-sanitize.js',
-      'bower_components/angular-loader/angular-loader.js',
-      'bower_components/bootstrap/dist/js/bootstrap.js',
-      'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
-      'test/test-main.js',
-      {pattern: 'app.js', included: false},
-//      {pattern: 'require-config.js', included: false},
+      //'bower_components/angular-sanitize/angular-sanitize.js',
+      //'bower_components/angular-touch/angular-touch.js',
+      //'bower_components/angular-loader/angular-loader.js',
+      //'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      //'bower_components/requirejs-text/text.js',
+      //'bower_components/ngstorage/ngStorage.js',
+      //'bower_components/angular-mass-autocomplete/massautocomplete.js',
+      //'bower_components/bootstrap/dist/js/bootstrap.js',
+      //'bower_components/ngDialog/js/ngDialog.js',
+      //'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
+      //'bower_components/crypto-js/sha256.js',
+      'test/*.js',
+      'test/teste.js',
+
       //'login/login.js',
-      //'layout/utils.js',
-      //'home/home.js',
       //'layout/menu.js',
+      //'home/home.js',
+      //'profile/signup.js',
+      //'layout/utils.js',
+      //'app.js',
 
-
-      {pattern: 'test/*.js', included: false}
     ],
 
 
     // list of files to exclude
     exclude: [
-        '/bower_components/crypto-js/**'
+      //'/bower_components/crypto-js/**',
+      //'require-config.js',
+      '**/*.swp',
+      '/bower_components/**/*min.js',
     ],
 
 
@@ -55,6 +72,11 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
 
+    plugins : [
+      'karma-chrome-launcher',
+      'karma-jasmine',
+      'karma-requirejs',
+    ],
 
     // web server port
     port: 9876,
@@ -76,7 +98,6 @@ module.exports = function(config) {
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['Chrome'],
-
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

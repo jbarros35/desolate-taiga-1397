@@ -370,8 +370,7 @@ define([
 	}]);
 
 	// new post form
-	home.directive("whatsnew", ['$parse', '$http','$q',
-		function($parse, $http, $compile, $templateCache, $q) {
+	home.directive("whatsnew", ['$q', function($q) {
 
 			return {
 		    restrict: "A",
@@ -562,17 +561,6 @@ define([
 						Dialogs.showMsg(err, 'error', $scope);
 						console.log(err);
 					});
-					/*
-					$http.post('/api/posts/', postData)
-						.success(function(res) {
-							$scope.description = null;	
-							$scope.images = [];
-							$scope.link = [];							
-						})
-						.error(function(err) {
-							Dialogs.showMsg(err, 'error', $scope);
-							console.log(err);
-						});*/
 				}
 				
 				function findUrls( text )
