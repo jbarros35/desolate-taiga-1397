@@ -1,14 +1,14 @@
 'use strict';
-define(['angular','angularMocks','test'], function(angular, mocks, utils) {
+define(['angular','login'], function(angular) {
 
     describe('NavCtrl', function() {
         var scope, $location, createController;
 
         beforeEach(function(){
-            module('utils');
+            module('angularRestfulAuth');
         });
 
-        beforeEach(inject(function ($rootScope, $controller, _$location_) {
+       beforeEach(inject(function ($rootScope, $controller, _$location_) {
             $location = _$location_;
             scope = $rootScope.$new();
 
@@ -17,6 +17,12 @@ define(['angular','angularMocks','test'], function(angular, mocks, utils) {
                     '$scope': scope
                 });
             };
+
+           loginCtrl = function() {
+               return $controller('loginCtrl', {
+                   '$scope': scope
+               });
+           };
         }));
 
         it('should have a method to check if the path is active', function() {

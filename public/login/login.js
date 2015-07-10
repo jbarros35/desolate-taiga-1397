@@ -11,7 +11,7 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
 		});
 	}]);
 
-     login.factory('Main', ['$http', '$localStorage', function($http, $localStorage){
+    login.factory('Main', ['$http', '$localStorage', function($http, $localStorage){
          var baseUrl = "/api/users";
          function changeUser(user) {
              angular.extend(currentUser, user);
@@ -71,8 +71,8 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
      }]);
 
 	// Login controller
-	login.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$localStorage', 'Main', 'ngDialog', '$window', '$route',
-		function($rootScope, $scope, $location, $localStorage, Main, ngDialog, $window, $route) {
+	login.controller('loginCtrl', ['$scope', '$location', '$localStorage', 'Main', 'ngDialog', '$route',
+		function($scope, $location, $localStorage, Main, ngDialog, $route) {
             // check environment variable
             Main.env(function(msg){
                     if (msg.env=='development'){
@@ -134,6 +134,10 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
 		// log out user		         
         $scope.token = $localStorage.token;
     }]);
-	
 
+    login.controller('NavCtrl', function($scope, $location) {
+        $scope.isActive = function(route) {
+            return route === $location.path();
+        };
+    });
 });

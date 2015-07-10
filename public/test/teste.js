@@ -4,9 +4,9 @@
 'use strict';
 define(['angular'], function(angular) {
 
-var utils = angular.module('utils', []);
+var teste = angular.module('teste', []);
 
-utils.controller('NavCtrl', function($scope, $location) {
+teste.controller('NavCtrl', function($scope, $location) {
     $scope.isActive = function(route) {
         return route === $location.path();
     };

@@ -40,8 +40,8 @@ define([
 	            };	          
 	        },
 		    templateUrl: "layout/drop-down.html",					
-		    controller: ['$scope', '$http', '$filter', 'ngDialog', '$location', '$window', '$route','$localStorage',
-			function ($scope, $http, $filter, ngDialog, $location,  $window, $route, $localStorage) {		    	
+		    controller: ['$scope', '$http', 'ngDialog', '$location', '$route','$localStorage',
+			function ($scope, $http, ngDialog, $location, $route, $localStorage) {
 				
 				$scope.user = {};
 				$scope.me = function() {
@@ -56,7 +56,7 @@ define([
 									$scope.logged = true;									
 									$scope.user = res;
 								}							
-							}, function() {
+							}, function(err) {
 								$scope.error = 'Failed to fetch details';
 							});
 						} else {

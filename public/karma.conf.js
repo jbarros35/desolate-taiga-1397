@@ -23,10 +23,17 @@ module.exports = function(config) {
       'bower_components/ngDialog/css/ngDialog.css',
       'bower_components/ngDialog/css/ngDialog-theme-default.css',*/
       //'bower_components/requirejs/require.js',
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
-      'bower_components/angular-route/angular-route.js',
-      //'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-resource/angular-resource.js',
+      'bower_components/ngstorage/ngStorage.js',
+      'bower_components/ngDialog/js/ngDialog.js',
+      'bower_components/angular-route/angular-route.js',
+      'bower_components/angular-sanitize/angular-sanitize.js',
+
+      //'bower_components/angular-resource/angular-resource.js',
+
       //'bower_components/angular-sanitize/angular-sanitize.js',
       //'bower_components/angular-touch/angular-touch.js',
       //'bower_components/angular-loader/angular-loader.js',
@@ -38,12 +45,14 @@ module.exports = function(config) {
       //'bower_components/ngDialog/js/ngDialog.js',
       //'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
       //'bower_components/crypto-js/sha256.js',
+      'login/login.js',
+      'home/home.js',
       'test/*.js',
       'test/teste.js',
 
-      //'login/login.js',
+
       //'layout/menu.js',
-      //'home/home.js',
+
       //'profile/signup.js',
       //'layout/utils.js',
       //'app.js',

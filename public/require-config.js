@@ -20,7 +20,7 @@ require.config({
 	waitSeconds: 0,
 	paths: {
 		angular: 		'bower_components/angular/angular.min',
-		angularRoute:   'bower_components/angular-route/angular-route.min',
+		'angularRoute':   'bower_components/angular-route/angular-route.min',
 		'ui-bootstrap': 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min',
 		angularMocks:   'bower_components/angular-mocks/angular-mocks',
 		'angular-resource': 'bower_components/angular-resource/angular-resource.min',
