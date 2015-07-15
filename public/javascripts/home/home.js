@@ -241,15 +241,6 @@ define([
 							$scope.error = error.data;
 							ngDialog.open({ template: 'partials/layout/errormsg.html', scope: $scope });
 						});
-					/*$http.post('/api/posts/comment', $scope.comment).success(function(res) {
-						// reload comments
-						$scope.loadcomments();
-						//$scope.comments.push($scope.comment);
-						$scope.comment = null;														
-					}).error(function(err) {
-						$scope.error = err.data;
-						ngDialog.open({ template: 'layout/errormsg.html', scope: $scope });
-					});*/
 				},
 				function(err) {		
 					$scope.error = err.data;
