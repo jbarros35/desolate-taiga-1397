@@ -5,20 +5,19 @@
  define([
 	'angular',
 	'angularRoute',
-	'ngStorage',
 	'ngDialog'
 ], function(angular) {	
   
 /* Controllers */
- var utils = angular.module('myapp.utils', ['ngRoute','ngStorage']);
+ var utils = angular.module('myapp.utils', ['ngRoute']);
  
-    utils.factory('Dialogs', ['$http', '$localStorage', 'ngDialog', function($http, $localStorage,ngDialog){
+    utils.factory('Dialogs', ['$http', 'ngDialog', function($http, $window, ngDialog){
 
          return {
              showMsg: function(msg,type,$scope) {
                 $scope.type = type;
                 $scope.msg = msg ? String(msg).replace(/<[^>]+>/gm, '') : "";
-                ngDialog.open({ template: 'layout/popupmsg.html', scope: $scope });
+                ngDialog.open({ template: 'partials/layout/popupmsg.html', scope: $scope });
              }
          };
      }]);

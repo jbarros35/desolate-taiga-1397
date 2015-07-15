@@ -4,31 +4,28 @@ define([
 	'angularRoute',
 	'ui-bootstrap',
 	'ngDialog',
-	'ngStorage',
-	'login/login'
+	'../login/login'
 ], function(angular) {
 
 	var menu = angular.module('myApp.menu', ['ngRoute','ui.bootstrap','angularRestfulAuth','ngDialog']);
 
 	// menu directive
-	menu.directive("topMenu", ['$parse', '$http', '$compile', '$templateCache', 'Main', 
-		function($parse, $http, $compile, $templateCache, Main) {
+	menu.directive("topMenu", ['$parse', '$http', '$compile', '$templateCache',
+		function($http) {
 
 		  return {
 		    restrict: "A",
 		    replace: true,
 		    scope: false,
 		    transclude: true,			
-		    templateUrl: "layout/top-menu.html",				
-		    controller: ['$scope', '$http', '$filter', '$localStorage', function ($scope, $http, $filter, $localStorage) {
-		    							
+		    templateUrl: "partials/layout/top-menu.html",
+		    controller: ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
 			}]
 		    };
 		  }]);
 		  
-	menu.directive("dropDown", ['$parse', '$http', '$compile', '$templateCache', 'Main',
-			function($parse, $http, $compile, $templateCache, Main) {
-
+	menu.directive("dropDown", ['$parse', '$http', '$compile', '$templateCache',
+			function($http) {
 		  return {
 		    restrict: "A",
 		    replace: true,
@@ -39,14 +36,13 @@ define([
 	                $scope.logged = log;
 	            };	          
 	        },
-		    templateUrl: "layout/drop-down.html",					
-		    controller: ['$scope', '$http', 'ngDialog', '$location', '$route','$localStorage',
-			function ($scope, $http, ngDialog, $location, $route, $localStorage) {
-				
+		    templateUrl: "partials/layout/drop-down.html",
+		    controller: ['$scope', '$http', 'ngDialog', '$location', '$route','LS', 'Main',
+			function ($scope, $http, ngDialog, $location, $route, LS, Main) {
 				$scope.user = {};
 				$scope.me = function() {
 					try {
-						if ($localStorage.token) {
+						if (LS.getData('token')) {
 							// check if token is valid
 							Main.me(function(res) {						 
 								if(res == "Forbidden") {
@@ -72,7 +68,7 @@ define([
 
 				// open login
 				$scope.clickToOpen = function () {
-					var dialog = ngDialog.open({ template: '/login/loginPopup.html', 
+					var dialog = ngDialog.open({ template: '/partials/login/loginPopup.html',
 					disableAnimation: true,  
 					className: 'ngdialog-theme-default', });					
 				};

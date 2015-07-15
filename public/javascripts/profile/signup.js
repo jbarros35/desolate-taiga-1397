@@ -2,23 +2,22 @@
 define([
 	'angular',
 	'angularRoute',
-	'login/login',
+	'../login/login',
 	'ui-bootstrap',
 	'ngDialog',
-	'ngStorage'
 ], function(angular) {
 
 	var signup = angular.module('myApp.signup', ['ngRoute','ui.bootstrap','angularRestfulAuth']);
 	
 	signup.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/signup', {
-			templateUrl: 'profile/signup.html',
+			templateUrl: 'partials/profile/signup.html',
 			controller: 'signupCtrl'
 		});
 	}]);
 	
-	signup.controller('signupCtrl', ['$rootScope', '$scope', '$location', '$localStorage', 'Main', '$window', '$route','ngDialog',
-		function($rootScope, $scope, $location, $localStorage, Main, $window, $route, ngDialog) {
+	signup.controller('signupCtrl', ['$rootScope', '$scope', '$location', 'Main', '$window', '$route','ngDialog',
+		function($rootScope, $scope, $location, Main, $window, $route, ngDialog) {
 			var user = {};
 			
 			$scope.register = function() {
@@ -32,7 +31,7 @@ define([
 					} else {
 						if (res.token) {							
 							// save token
-							$localStorage.token = res.token;
+							$window.localStorage['token'] = res.token;
 							//console.log($localStorage.token);
 							$scope.changeLogged(true);
 							var dialog = ngDialog.open({ 

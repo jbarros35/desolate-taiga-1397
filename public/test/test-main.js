@@ -27,10 +27,11 @@ require.config({
     'jquery': '/base/bower_components/jquery/dist/jquery',
     'angular': '/base/bower_components/angular/angular',
     'angularMocks': '/base/bower_components/angular-mocks/angular-mocks',
-    'angularRoute': '/base/bower_components/angular-resource/angular-resource',
+    'angularRoute':   '/base/bower_components/angular-route/angular-route',
+    'angular-resource': '/base/bower_components/angular-resource/angular-resource',
     'ngStorage': '/base/bower_components/ngstorage/ngStorage',
     'ngDialog': '/base/bower_components/ngDialog/js/ngDialog',
-    'angular-route':   '/base/bower_components/angular-route/angular-route',
+
     /*'angular-resource': '/base/bower_components/angular-resource/angular-resource',
     'angular-sanitize' : '/base/bower_components/angular-sanitize/angular-sanitize',
     'angular-touch':'/base/bower_components/angular-touch/angular-touch',
@@ -44,10 +45,10 @@ require.config({
     'text': 		 '/base/bower_components/requirejs-text/text',
     'jasmine-core': '../../node_modules/jasmine-core/lib/jasmine-core',
     'infinite-scroll':'/base/bower_components/ngInfiniteScroll/build/ng-infinite-scroll',*/
-      'login':'/base/login/login',
-      'home':'/base/home/home',
-    'test':'/base/test/teste',
-    'app':'/base/app'
+    //'login':'/base/login/login',
+     // 'home':'/base/home/home',
+    //'test':'/base/test/teste',
+    //'app':'/base/app'
   },
   shim: {
     'angular': { exports: 'angular' },

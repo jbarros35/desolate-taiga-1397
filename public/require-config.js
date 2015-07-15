@@ -25,8 +25,8 @@ require.config({
 		angularMocks:   'bower_components/angular-mocks/angular-mocks',
 		'angular-resource': 'bower_components/angular-resource/angular-resource.min',
 		text: 		 'bower_components/requirejs-text/text',
-		'ngStorage': 'bower_components/ngstorage/ngStorage.min',
-		ngDialog: 'bower_components/ngDialog/js/ngDialog.min',
+		//'ngStorage': 'bower_components/ngstorage/ngStorage.min',
+		'ngDialog': 'bower_components/ngDialog/js/ngDialog.min',
 		'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
 		'angular-sanitize' : 'bower_components/angular-sanitize/angular-sanitize.min',
 		'mass-complete':'bower_components/angular-mass-autocomplete/massautocomplete.min',
@@ -41,7 +41,7 @@ require.config({
 		},
 		'ui-bootstrap': ['angular'],
 		'angular-resource': ['angular'],
-		'ngStorage': ['angular'],
+		//'ngStorage': ['angular'],
 		'ngDialog': ['angular'],
 		'angular-sanitize':['angular'],
 		'mass-complete':['angular-sanitize']
@@ -65,7 +65,3 @@ require([
 		});
 	}
 );
-
-var globalConfig = {
-	    serviceURL: 'http://localhost:3000/api'
-};

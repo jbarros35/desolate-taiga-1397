@@ -6,8 +6,8 @@ define([
 	'infinite-scroll',
 	'angular-sanitize',
 	'mass-complete',
-	'login/login',
-	'layout/utils'
+	'../login/login',
+	'../utils/utils'
 ], function(angular) {
 
 	var home = angular.module('myApp.home', ['ngRoute','ui.bootstrap', 'infinite-scroll',
@@ -170,10 +170,10 @@ define([
 
 	home.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/', {
-			templateUrl: 'home/home.html',
+			templateUrl: 'partials/home/home.html',
 			controller: 'homeCtrl'
 		}).when('/viewpost/:id', {
-			templateUrl: 'home/viewpost.html',
+			templateUrl: 'partials/home/viewpost.html',
 			controller: 'postCtrl'
 		});
 	}]);
@@ -186,7 +186,7 @@ define([
 				replace: true,
 				scope: false,
 				transclude: true,			
-				templateUrl: "home/hashtags.html",				
+				templateUrl: "partials/home/hashtags.html",
 				controller: ['$scope', '$http', 'tagService', function ($scope, $http, tagService) {
 					tagService.getTags().then(function(data){
 						if (data) {
@@ -239,7 +239,7 @@ define([
 							$scope.comment = null;
 						}, function(error){
 							$scope.error = error.data;
-							ngDialog.open({ template: 'layout/errormsg.html', scope: $scope });
+							ngDialog.open({ template: 'partials/layout/errormsg.html', scope: $scope });
 						});
 					/*$http.post('/api/posts/comment', $scope.comment).success(function(res) {
 						// reload comments
@@ -253,7 +253,7 @@ define([
 				},
 				function(err) {		
 					$scope.error = err.data;
-					ngDialog.open({ template: 'layout/errormsg.html', scope: $scope });
+					ngDialog.open({ template: 'partials/layout/errormsg.html', scope: $scope });
 				});
 				
 			}
@@ -392,7 +392,7 @@ define([
 					$scope.categoriesRaw = value;
 				}
 	        },
-		    templateUrl: "home/whatsnew.html",				
+		    templateUrl: "partials/home/whatsnew.html",
 		    controller: ['$scope', '$filter', 'Dialogs', '$localStorage', 'Main','$q','tagService',
 				function ($scope, $filter, Dialogs, $localStorage, Main, $q, tagService) {
 					var categoriesRaw = {};

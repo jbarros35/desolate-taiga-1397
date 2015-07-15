@@ -1,17 +1,17 @@
 'use strict';
-define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
+define(['angular','angularRoute','ngDialog'], function(angular) {
   
 /* Controllers */
- var login = angular.module('angularRestfulAuth', ['ngRoute','ngStorage']);
+ var login = angular.module('angularRestfulAuth', ['ngRoute']);
  
     login.config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/login', {
-			templateUrl: 'login/loginPage.html',
+			templateUrl: 'partials/login/loginPage.html',
 			controller: 'loginCtrl'
 		});
 	}]);
 
-    login.factory('Main', ['$http', '$localStorage', function($http, $localStorage){
+    login.factory('Main', ['$http', 'LS', function($http, LS){
          var baseUrl = "/api/users";
          function changeUser(user) {
              angular.extend(currentUser, user);
@@ -35,9 +35,9 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
          }
 
          function getUserFromToken() {
-             var token = $localStorage.token;
+             var token = LS.getData('token');
              var user = {};
-             if (typeof token !== 'undefined') {
+             if (token && typeof token !== 'undefined') {
                  var encoded = token.split('.')[1];
                  user = JSON.parse(urlBase64Decode(encoded));
              }
@@ -64,15 +64,36 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
              },
              logout: function(success) {
                  changeUser({});
-                 delete $localStorage.token;
+                 //delete $localStorage.token;
+                 LS.clearData();
                  success();
              }
          };
      }]);
 
+    login.factory('LS', ['$window', function($window, $rootScope) {
+        angular.element($window).on('storage', function(event) {
+            //if (event.key === 'my-storage') {
+                $rootScope.$apply();
+            //}
+        });
+        return {
+            setData: function(key,val) {
+                $window.localStorage && $window.localStorage.setItem(key, val);
+                return this;
+            },
+            getData: function(key) {
+                return $window.localStorage && $window.localStorage.getItem(key);
+            },
+            clearData: function() {
+                return $window.localStorage && $window.localStorage.clear();
+            }
+        };
+    }]);
+
 	// Login controller
-	login.controller('loginCtrl', ['$scope', '$location', '$localStorage', 'Main', 'ngDialog', '$route',
-		function($scope, $location, $localStorage, Main, ngDialog, $route) {
+	login.controller('loginCtrl', ['$scope', '$location', 'Main', 'ngDialog', '$route', 'LS',
+		function($scope, $location, Main, ngDialog, $route, LS) {
             // check environment variable
             Main.env(function(msg){
                     if (msg.env=='development'){
@@ -82,7 +103,9 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
                             ".eyJlbWFpbCI6Impvc2VjYXJsb3MuYmFycm9zQGdtYWlsLmNvbSIsImlhdCI6MTQzNTQzNjMyOSwiZXhwIjoxNDM1NTIyNzI5fQ" +
                             ".olCGwv3TYKfWYk5gDHr13miIP9e-jEj6eLvt4Jxz40k"};
                         ngDialog.closeAll();
-                        $localStorage.token = user.token;
+                        //$LS.token = user.token;
+                        //$window.LS = user.token;
+                        LS.setData('token', user.token);
                         $scope.changeLogged(true);
                         return;
                     }
@@ -111,8 +134,10 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
                 } else {
 					if (res.token) {
 						ngDialog.closeAll();
-						$localStorage.token = res.token;
-						$scope.changeLogged(true);						
+						//$LS.token = res.token;
+                        //$window.LS['token'] = res.token;
+                        LS.setData('token', res.token);
+						$scope.changeLogged(true);
 					} else {
 						$scope.message='Failed to signin, no token provided';
 						//$rootScope.error = 'Failed to signin';
@@ -132,8 +157,10 @@ define(['angular','angularRoute','ngStorage','ngDialog'], function(angular) {
 			$route.reload();			
 		};
 		// log out user		         
-        $scope.token = $localStorage.token;
+        $scope.token = LS.getData('token');
     }]);
+
+
 
     login.controller('NavCtrl', function($scope, $location) {
         $scope.isActive = function(route) {

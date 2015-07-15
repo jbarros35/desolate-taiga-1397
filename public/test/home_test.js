@@ -1,5 +1,5 @@
 'use strict';
-define(['angular','login'], function(angular) {
+define(['angular','angularRoute'], function(angular) {
 
     describe('NavCtrl', function() {
         var scope, $location, createController;
@@ -18,11 +18,6 @@ define(['angular','login'], function(angular) {
                 });
             };
 
-           loginCtrl = function() {
-               return $controller('loginCtrl', {
-                   '$scope': scope
-               });
-           };
         }));
 
         it('should have a method to check if the path is active', function() {

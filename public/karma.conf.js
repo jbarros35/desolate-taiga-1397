@@ -16,7 +16,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/test-main.js',
+
       /*'bower_components/jquery/dist/jquery.js',
       'bower_components/bootstrap/dist/css/bootstrap.min.css',
       'bower_components/angular-mass-autocomplete/massautocomplete.theme.css',
@@ -27,7 +27,7 @@ module.exports = function(config) {
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/angular-resource/angular-resource.js',
-      'bower_components/ngstorage/ngStorage.js',
+      //'bower_components/ngstorage/ngStorage.js',
       'bower_components/ngDialog/js/ngDialog.js',
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
@@ -45,34 +45,28 @@ module.exports = function(config) {
       //'bower_components/ngDialog/js/ngDialog.js',
       //'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
       //'bower_components/crypto-js/sha256.js',
-      'login/login.js',
-      'home/home.js',
+      'test/test-main.js',
+      'javascripts/login/login.js',
+      'javascripts/layout/utils',
+      'javascripts/home/home.js',
       'test/*.js',
       'test/teste.js',
-
-
       //'layout/menu.js',
-
       //'profile/signup.js',
       //'layout/utils.js',
       //'app.js',
-
     ],
 
 
     // list of files to exclude
     exclude: [
-      //'/bower_components/crypto-js/**',
-      //'require-config.js',
-      '**/*.swp',
-      '/bower_components/**/*min.js',
+     'require-config.js'
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'public/**/*.js': 'coverage'
     },
 
 
@@ -80,12 +74,6 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
-
-    plugins : [
-      'karma-chrome-launcher',
-      'karma-jasmine',
-      'karma-requirejs',
-    ],
 
     // web server port
     port: 9876,
@@ -106,7 +94,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
