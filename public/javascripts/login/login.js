@@ -67,7 +67,7 @@ define(['angular','angularRoute','ngDialog'], function(angular) {
                  //delete $localStorage.token;
                  LS.clearData();
                  success();
-             }
+             },
          };
      }]);
 
@@ -103,8 +103,6 @@ define(['angular','angularRoute','ngDialog'], function(angular) {
                             ".eyJlbWFpbCI6Impvc2VjYXJsb3MuYmFycm9zQGdtYWlsLmNvbSIsImlhdCI6MTQzNTQzNjMyOSwiZXhwIjoxNDM1NTIyNzI5fQ" +
                             ".olCGwv3TYKfWYk5gDHr13miIP9e-jEj6eLvt4Jxz40k"};
                         ngDialog.closeAll();
-                        //$LS.token = user.token;
-                        //$window.LS = user.token;
                         LS.setData('token', user.token);
                         $scope.changeLogged(true);
                         return;
@@ -159,8 +157,6 @@ define(['angular','angularRoute','ngDialog'], function(angular) {
 		// log out user		         
         $scope.token = LS.getData('token');
     }]);
-
-
 
     login.controller('NavCtrl', function($scope, $location) {
         $scope.isActive = function(route) {

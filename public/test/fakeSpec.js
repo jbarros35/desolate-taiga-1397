@@ -3,11 +3,11 @@
  */
 /*global module, inject */
 
-define(['fake/home', 'angularMocks',], function(app) {
+define(['fake/fake', 'angularMocks',], function(app) {
     'use strict';
-    describe('homeController', function () {
+    describe('fakeController', function () {
         var scope, $location, createController, window;
-        beforeEach(module('homeApp'));
+        beforeEach(module('fakeApp'));
 
         beforeEach(inject(function ($rootScope, $controller, _$location_, _$window_) {
             $location = _$location_;
@@ -15,7 +15,7 @@ define(['fake/home', 'angularMocks',], function(app) {
             window = _$window_;
             //console.log('window inject');
             createController = function () {
-                return $controller('homeController', {
+                return $controller('fakeController', {
                     $scope: scope,
                     $window : window
                 });
