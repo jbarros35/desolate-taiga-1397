@@ -1,15 +1,20 @@
 'use strict';
+/*define(['angular', 'angularRoute'], function(angular) {
+
+	var app = angular.module('app', ['ngRoute']);
+	return app;
+});*/
 
 define([
 	'angular',
 	'angularRoute',
 	'angular-resource',
-	'ui-bootstrap',	
+	'ui-bootstrap',
 	'javascripts/layout/menu',
 	'javascripts/login/login',
 	'javascripts/home/home',
 	'javascripts/utils/utils',
-	'javascripts/profile/signup'
+	'javascripts/profile/signup',
 ], function(angular) {
 	// Declare app level module which depends on views, and components
 	var app = angular.module('myApp', [
@@ -17,9 +22,9 @@ define([
 		'myApp.menu',
 		'myApp.home',
 		'myApp.signup',
-		'myapp.utils'
+		'myapp.utils',
 	]);
-	
+
 	app.factory('httpRequestInterceptor', function ($window) {
 		  return {
 		    request: function (config) {
@@ -42,6 +47,6 @@ define([
         }).otherwise({redirectTo: '/404'});			
 		
 	}]);
-	return app;
 
+	return app;
 });
