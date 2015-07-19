@@ -66,7 +66,7 @@ router.post('/', secret.ensureAuthorized, function(req, res) {
 				shortdescription: req.body.description ? req.body.description.substring(0,255): null,
 			    embed: req.body.embed,
 				description: req.body.description,
-				titleImage: req.body.titleImage, 
+				titleimage: req.body.titleimage,
 				link: req.body.link,
 				type: req.body.type,
 				userid: req.body.userid	

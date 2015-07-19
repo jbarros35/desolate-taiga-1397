@@ -25,12 +25,15 @@ module.exports = function(config) {
       {pattern:'bower_components/angular-sanitize/angular-sanitize.js',included: false},
       {pattern:'bower_components/angular-mass-autocomplete/massautocomplete.js', included: false},
       {pattern:'bower_components/angular-touch/angular-touch.js',included: false},
+      {pattern:'bower_components/jquery/dist/jquery.js',included: false},
       {pattern:'http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js',included: false},
       {pattern: 'javascripts/**/*.js', included: false},
       {pattern: 'test/**/*Spec.js', included: false},
+        // templates dir
+      { pattern: 'partials/home/hashtags.html', included: false },
+      { pattern: 'partials/home/home.html', included: false },
       'test-main.js',
     ],
-
 
     // list of files to exclude
     exclude: [
@@ -41,14 +44,37 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      // source files, that you wanna generate coverage for
+      // do not include tests or libraries
+      // (these files will be instrumented by Istanbul)
+      //'javascripts/**/*.js': ['coverage'],
+      'partials/**/*.html':'ng-html2js'
     },
 
+    ngHtml2JsPreprocessor: {
+      // Paths by default are relative to DISK root,
+      // so we need to make them relative to this folder
+      /*cacheIdFromPath : function(filepath) {
+        return filepath.substr(filepath.indexOf("appname")+8);
+      },*/
+      // If your build process changes the path to your templates,
+      // use stripPrefix and prependPrefix to adjust it.
+      stripPrefix: 'partials/home/',
+      //prependPrefix: '/',
+      // the name of the Angular module to create
+      moduleName: "mytemplates"
+    },
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
 
+    // optionally, configure the reporter
+    coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+    },
 
     // web server port
     port: 9876,

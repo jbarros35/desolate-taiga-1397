@@ -18,12 +18,16 @@ require.config({
         'angular-resource': '../bower_components/angular-resource/angular-resource',
         'ui-bootstrap': '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
         'ngDialog': '../bower_components/ngDialog/js/ngDialog',
-        'infinite-scroll':'bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
-        'angular-sanitize' : 'bower_components/angular-sanitize/angular-sanitize.min',
-        'mass-complete':'bower_components/angular-mass-autocomplete/massautocomplete.min',
-        'angular-touch':'bower_components/angular-touch/angular-touch',
+        'infinite-scroll':'../bower_components/ngInfiniteScroll/build/ng-infinite-scroll',
+        'angular-sanitize' : '../bower_components/angular-sanitize/angular-sanitize',
+        'mass-complete':'../bower_components/angular-mass-autocomplete/massautocomplete',
+        'angular-touch':'../bower_components/angular-touch/angular-touch',
+        'jquery' : '../bower_components/jquery/dist/jquery',
+        // directive templates
+        'hashtags' : '../partials/home/hashtags.html'
     },
     shim: {
+        'jquery': {'exports': '$'},
         'angular' : {'exports' : 'angular'},
         'angularRoute': ['angular'],
         'angularMocks': {
@@ -33,8 +37,11 @@ require.config({
         'angular-resource': ['angular'],
         'ui-bootstrap': ['angular'],
         'ngDialog': ['angular'],
+        'infinite-scroll': ['angular'],
         'angular-sanitize':['angular'],
-        'mass-complete':['angular-sanitize']
+        'mass-complete':['angular-sanitize'],
+        // directive templates
+        'hashtags': { deps: ['angular'] },
     },
     priority: [
         "angular"

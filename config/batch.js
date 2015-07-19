@@ -66,14 +66,17 @@ module.exports = {
 						titleimage: 'assets/img/postsImg/fosterthepeople.jpg',
 						type:2, featured:true});
 
-		  //}		
-
+		var postsCreated = [];
 		for (var i = 0; i < posts.length;i++) {
 			models.post.create(posts[i]).then(function(post){
 				post.addTag(tags[0]);
 				post.addTag(tags[3]);
+				models.comment.create({description: 'my comment for post',
+					userid: profile.profileid,
+					postid: post.postid});
 			});
 		}
+
 
 		  
 		 /* models.post.bulkCreate(posts).then(function(postList){

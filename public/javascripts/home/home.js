@@ -86,9 +86,9 @@ define([
 			},
 			savePost: function(postData){
 				return $http.post('/api/posts/', postData)
-					.then(function(res){
+					.then(function(response){
 						return response.data;
-					}, function(err){
+					}, function(response){
 						return $q.reject(response);
 					})
 			},
@@ -104,7 +104,7 @@ define([
 					})
 			},
 			featuredPosts: function() {
-				return $http.get('api/posts/getFeaturedPosts').then(function(response){
+				return $http.get('/api/posts/getFeaturedPosts').then(function(response){
 					if (typeof response.data === 'object') {
 						return response.data;
 					}
@@ -177,15 +177,15 @@ define([
 			controller: 'postCtrl'
 		});
 	}]);
-	
+
 	//tagCtrl	
 	home.directive("hashtags", [
-		function() {
-		return {
+		function($templateCache) {
+			var config = {
 				restrict: "A",
 				replace: true,
 				scope: false,
-				transclude: true,			
+				transclude: true,
 				templateUrl: "partials/home/hashtags.html",
 				controller: ['$scope', '$http', 'tagService', function ($scope, $http, tagService) {
 					tagService.getTags().then(function(data){
@@ -197,28 +197,32 @@ define([
 					});
 
 				}]
-			};
+		};
+
+		return config;
 		}
 	]);
 	
 	//
 	home.controller('postCtrl', ['$scope', '$http', '$routeParams', 'Main', 'postService', 'ngDialog',
 		function($scope,$http,$routeParams,Main,postService,ngDialog) {
-
+		console.log('postctrl');
 		// load post data
 		postService.viewPost($routeParams.id).then(function(res){
 			if (res) {
 				$scope.post = res;
+				console.log('viepowst:'+res);
 			}
 		});
-			 $scope.comments = [];
-			 $scope.comment = {};
+		$scope.comments = [];
+		$scope.comment = {};
 
 		// load comments
 		$scope.loadcomments = function() {
 			postService.commentsForPost($routeParams.id).then(function(res){
 				if (res) {
 					$scope.comments = res;
+					console.log('commentsforpost:'+res);
 				}
 			});
 
@@ -281,7 +285,7 @@ define([
 
 	home.controller('homeCtrl', ['$scope', '$http', '$interval', '$window','postService',
 		function($scope,$http,$interval,$window,postService) {
-				
+		//console.log($window);
 		var page = 0;
 		var limit = 10;
 		$scope.posts = [];
@@ -292,9 +296,7 @@ define([
 			if (!hasmore) {
 				return;
 			}
-			$scope.busy = true;		
-			//$http.get('/api/posts/postsLast24h?page='+page+'&limit='+limit)
-			//	.success(function(res) {
+			$scope.busy = true;
 			postService.fetchPosts(page,limit).then(function(res){
 				if (res && res.length > 0) {
 					hasmore = true;
